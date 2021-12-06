@@ -1,0 +1,11 @@
+*~
+*.class
+*.log
+/bin/
+/target/
+/temp/
+/global/
+/iana/
+/.project
+/.settings/
+/.classpath
