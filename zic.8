@@ -31,7 +31,8 @@ zic \- timezone compiler
 The
 .B zic
 program reads text from the file(s) named on the command line
-and creates the time conversion information files specified in this input.
+and creates the timezone information format (TZif) files
+specified in this input.
 If a
 .I filename
 is
@@ -121,7 +122,7 @@ is
 any already-existing link is removed.
 .TP
 .BR "\*-r " "[\fB@\fP\fIlo\fP][\fB/@\fP\fIhi\fP]"
-Reduce the size of output files by limiting their applicability
+Limit the applicability of output files
 to timestamps in the range from
 .I lo
 (inclusive) to
@@ -133,6 +134,10 @@ and
 are possibly-signed decimal counts of seconds since the Epoch
 (1970-01-01 00:00:00 UTC).
 Omitted counts default to extreme values.
+The output files use UT offset 0 and abbreviation
+.q "\*-00"
+in place of the omitted timestamp data;
+this typically reduces the files' sizes.
 For example,
 .q "zic \*-r @0"
 omits data intended for negative timestamps (i.e., before the Epoch), and
@@ -213,6 +218,15 @@ code designed for older
 output formats.  These compatibility issues affect only timestamps
 before 1970 or after the start of 2038.
 .PP
+The output contains a truncated leap second table,
+which can cause some older TZif readers to misbehave.
+This can occur if the
+.B "\*-L"
+option is used, and either an Expires line is present or
+the
+.B "\*-r"
+option is also used.
+.PP
 The output file contains more than 1200 transitions,
 which may be mishandled by some clients.
 The current reference client supports at most 2000 transitions;
@@ -242,7 +256,7 @@ zero or more lines, each ending in a newline byte and containing at
 most 511 bytes, and without any NUL bytes.  The input text's encoding
 is typically UTF-8 or ASCII; it should have a unibyte representation
 for the POSIX Portable Character Set (PPCS)
-\*<http://pubs\*:.opengroup\*:.org/\*:onlinepubs/\*:9699919799/\*:basedefs/\*:V1_chap06\*:.html\*>
+\*<https://pubs\*:.opengroup\*:.org/\*:onlinepubs/\*:9699919799/\*:basedefs/\*:V1_chap06\*:.html\*>
 and the encoding's non-unibyte characters should consist entirely of
 non-PPCS bytes.  Non-PPCS characters typically occur only in comments:
 although output file names and time zone abbreviations can contain
@@ -513,8 +527,8 @@ begin the field with a minus sign if time must be subtracted from UT.
 .B RULES
 The name of the rules that apply in the timezone or,
 alternatively, a field in the same format as a rule-line SAVE column,
-giving of the amount of time to be added to local standard time
-effect, and whether the resulting time is standard or daylight saving.
+giving the amount of time to be added to local standard time
+and whether the resulting time is standard or daylight saving.
 If this field is
 .B \*-
 then standard time always applies.
@@ -540,7 +554,7 @@ using the shortest form that does not lose information, where
 .IR mm ,
 and
 .I ss
-are the hours, minutes, and seconds east (+) or west (\(mi) of UT.
+are the hours, minutes, and seconds east (+) or west (\-) of UT.
 Alternatively,
 a slash (/)
 separates standard and daylight abbreviations.
@@ -549,6 +563,9 @@ alphanumeric ASCII characters,
 .q "+"
 and
 .q "\*-".
+By convention, the time zone abbreviation
+.q "\*-00"
+is a placeholder that means local time is unspecified.
 .TP
 .B UNTIL
 The time at which the UT offset or the rule(s) change for a location.
@@ -700,6 +717,19 @@ or
 if the leap second time given by the other fields should be interpreted as
 local (wall clock) time.
 .PP
+Rolling leap seconds were implemented back when it was not
+clear whether common practice was rolling or stationary,
+with concerns that one would see
+Times Square ball drops where there'd be a
+.q "3... 2... 1... leap... Happy New Year"
+countdown, placing the leap second at
+midnight New York time rather than midnight UTC.
+However, this countdown style does not seem to have caught on,
+which means rolling leap seconds are not used in practice;
+also, they are not supported if the
+.B \*-r
+option is used.
+.PP
 The expiration line, if present, has the form:
 .nf
 .ti +.5i
@@ -720,22 +750,6 @@ The
 and
 .B HH:MM:SS
 fields give the expiration timestamp in UTC for the leap second table;
-.B zic
-outputs this expiration timestamp by truncating the end of the output
-file to the timestamp.
-If there is no expiration line,
-.B zic
-also accepts a comment
-.q "#expires \fIE\fP ...\&"
-where
-.I E
-is the expiration timestamp as a decimal integer count of seconds
-since the Epoch, not counting leap seconds.
-However, the
-.q "#expires"
-comment is an obsolescent feature,
-and the leap second file should use an expiration line
-instead of relying on a comment.
 .SH "EXTENDED EXAMPLE"
 Here is an extended example of
 .B zic
