@@ -58,6 +58,8 @@ public class GenerateGlobalTz {
             generator.write();
             System.out.println("Committing");
             generator.gitCommit();
+            System.out.println("Pushing");
+            generator.gitPush();
             System.out.println("Done");
             System.exit(0);
 
@@ -111,6 +113,15 @@ public class GenerateGlobalTz {
         pb2.directory(GLOBAL_DIR.toFile());
         if (executeCommand(pb2) != 0) {
             throw new IllegalStateException("Git commit failed");
+        }
+    }
+
+    // performs git push
+    private void gitPush() throws Exception {
+        var pb1 = new ProcessBuilder("git", "push");
+        pb1.directory(GLOBAL_DIR.toFile());
+        if (executeCommand(pb1) != 0) {
+            throw new IllegalStateException("Git push failed");
         }
     }
 
