@@ -6,7 +6,7 @@
 # This file is by no means authoritative; if you think you know better,
 # go ahead and edit the file (and please send any changes to
 # tz@iana.org for general use in the future).  For more, please see
-# the file CONTRIBUTING in the tz distribution.
+# the file CONTRIBUTING.md in the tz distribution.
 
 # From Paul Eggert (2019-07-11):
 #
@@ -3406,8 +3406,9 @@ Zone	Asia/Karachi	4:28:12 -	LMT	1907
 # ... winter time will begin in Palestine from Friday 10-29, 01:00 AM
 # by 60 minutes backwards.
 #
-# From Paul Eggert (2021-10-20):
-# Guess future fall transitions on October's last Friday at 01:00.
+# From Tim Parenti (2021-10-25), per Paul Eggert (2021-10-24):
+# Guess future fall transitions at 01:00 on the Friday preceding October's
+# last Sunday (i.e., Fri>=23), as this is more consistent with recent practice.
 
 # Rule	NAME	FROM	TO	-	IN	ON	AT	SAVE	LETTER/S
 Rule EgyptAsia	1957	only	-	May	10	0:00	1:00	S
@@ -3445,7 +3446,7 @@ Rule Palestine	2019	only	-	Mar	29	0:00	1:00	S
 Rule Palestine	2019	only	-	Oct	Sat>=24	0:00	0	-
 Rule Palestine	2020	max	-	Mar	Sat>=24	0:00	1:00	S
 Rule Palestine	2020	only	-	Oct	24	1:00	0	-
-Rule Palestine	2021	max	-	Oct	lastFri	1:00	0	-
+Rule Palestine	2021	max	-	Oct	Fri>=23	1:00	0	-
 
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
 Zone	Asia/Gaza	2:17:52	-	LMT	1900 Oct

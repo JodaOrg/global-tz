@@ -5,7 +5,7 @@
 # This file is by no means authoritative; if you think you know
 # better, go ahead and edit it (and please send any changes to
 # tz@iana.org for general use in the future).  For more, please see
-# the file CONTRIBUTING in the tz distribution.
+# the file CONTRIBUTING.md in the tz distribution.
 
 
 # From Paul Eggert (2014-10-31):
@@ -290,6 +290,7 @@ Rule	SL	1932	only	-	Dec	 1	 0:00	0:20	-0040
 Rule	SL	1933	1938	-	Mar	31	24:00	0	-01
 Rule	SL	1933	1939	-	Aug	31	24:00	0:20	-0040
 Rule	SL	1939	only	-	May	31	24:00	0	-01
+
 Zone	Africa/Freetown	-0:53:00 -	LMT	1882
 			-0:53:00 -	FMT	1913 Jul  1 # Freetown MT
 			-1:00	SL	%s	1939 Sep  5
@@ -752,7 +753,6 @@ Zone America/Port_of_Spain -4:06:04 -	LMT	1912 Mar 2
 			-4:00	-	AST
 Link America/Port_of_Spain America/Marigot
 Link America/Port_of_Spain America/St_Barthelemy
-Link America/Port_of_Spain America/Virgin
 
 # Argentina
 # This entry was intended for the following areas, but has been superseded by
@@ -815,11 +815,11 @@ Link Antarctica/McMurdo Antarctica/South_Pole
 # Syowa station, which is the first antarctic station of Japan,
 # was established on 1957-01-29.  Since Syowa station is still the main
 # station of Japan, it's appropriate for the principal location.
-Zone Antarctica/Syowa	0	-	-00	1957 Jan 29
-			3:00	-	+03
 # See:
 # NIPR Antarctic Research Activities (1999-08-17)
 # http://www.nipr.ac.jp/english/ara01.html
+Zone Antarctica/Syowa	0	-	-00	1957 Jan 29
+			3:00	-	+03
 
 # Yemen
 # Milne says 2:59:54 was the meridian of the saluting battery at Aden,

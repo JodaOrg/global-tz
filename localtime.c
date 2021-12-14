@@ -434,35 +434,45 @@ tzloadbody(char const *name, struct state *sp, bool doextend,
 	if (close(fid) < 0)
 	  return errno;
 	for (stored = 4; stored <= 8; stored *= 2) {
-		int_fast32_t ttisstdcnt = detzcode(up->tzhead.tzh_ttisstdcnt);
-		int_fast32_t ttisutcnt = detzcode(up->tzhead.tzh_ttisutcnt);
-		int_fast64_t prevtr = -1;
-		int_fast32_t prevcorr;
-		int_fast32_t leapcnt = detzcode(up->tzhead.tzh_leapcnt);
-		int_fast32_t timecnt = detzcode(up->tzhead.tzh_timecnt);
-		int_fast32_t typecnt = detzcode(up->tzhead.tzh_typecnt);
-		int_fast32_t charcnt = detzcode(up->tzhead.tzh_charcnt);
-		char const *p = up->buf + tzheadsize;
-		/* Although tzfile(5) currently requires typecnt to be nonzero,
-		   support future formats that may allow zero typecnt
-		   in files that have a TZ string and no transitions.  */
-		if (! (0 <= leapcnt && leapcnt < TZ_MAX_LEAPS
-		       && 0 <= typecnt && typecnt < TZ_MAX_TYPES
-		       && 0 <= timecnt && timecnt < TZ_MAX_TIMES
-		       && 0 <= charcnt && charcnt < TZ_MAX_CHARS
-		       && (ttisstdcnt == typecnt || ttisstdcnt == 0)
-		       && (ttisutcnt == typecnt || ttisutcnt == 0)))
-		  return EINVAL;
-		if (nread
-		    < (tzheadsize		/* struct tzhead */
-		       + timecnt * stored	/* ats */
+	    char version = up->tzhead.tzh_version[0];
+	    bool skip_datablock = stored == 4 && version;
+	    int_fast32_t datablock_size;
+	    int_fast32_t ttisstdcnt = detzcode(up->tzhead.tzh_ttisstdcnt);
+	    int_fast32_t ttisutcnt = detzcode(up->tzhead.tzh_ttisutcnt);
+	    int_fast64_t prevtr = -1;
+	    int_fast32_t prevcorr;
+	    int_fast32_t leapcnt = detzcode(up->tzhead.tzh_leapcnt);
+	    int_fast32_t timecnt = detzcode(up->tzhead.tzh_timecnt);
+	    int_fast32_t typecnt = detzcode(up->tzhead.tzh_typecnt);
+	    int_fast32_t charcnt = detzcode(up->tzhead.tzh_charcnt);
+	    char const *p = up->buf + tzheadsize;
+	    /* Although tzfile(5) currently requires typecnt to be nonzero,
+	       support future formats that may allow zero typecnt
+	       in files that have a TZ string and no transitions.  */
+	    if (! (0 <= leapcnt && leapcnt < TZ_MAX_LEAPS
+		   && 0 <= typecnt && typecnt < TZ_MAX_TYPES
+		   && 0 <= timecnt && timecnt < TZ_MAX_TIMES
+		   && 0 <= charcnt && charcnt < TZ_MAX_CHARS
+		   && 0 <= ttisstdcnt && ttisstdcnt < TZ_MAX_TYPES
+		   && 0 <= ttisutcnt && ttisutcnt < TZ_MAX_TYPES))
+	      return EINVAL;
+	    datablock_size
+		    = (timecnt * stored		/* ats */
 		       + timecnt		/* types */
 		       + typecnt * 6		/* ttinfos */
 		       + charcnt		/* chars */
 		       + leapcnt * (stored + 4)	/* lsinfos */
 		       + ttisstdcnt		/* ttisstds */
-		       + ttisutcnt))		/* ttisuts */
+		       + ttisutcnt);		/* ttisuts */
+	    if (nread < tzheadsize + datablock_size)
+	      return EINVAL;
+	    if (skip_datablock)
+		p += datablock_size;
+	    else {
+		if (! ((ttisstdcnt == typecnt || ttisstdcnt == 0)
+		       && (ttisutcnt == typecnt || ttisutcnt == 0)))
 		  return EINVAL;
+
 		sp->leapcnt = leapcnt;
 		sp->timecnt = timecnt;
 		sp->typecnt = typecnt;
@@ -526,24 +536,29 @@ tzloadbody(char const *name, struct state *sp, bool doextend,
 		  int_fast64_t tr = stored == 4 ? detzcode(p) : detzcode64(p);
 		  int_fast32_t corr = detzcode(p + stored);
 		  p += stored + 4;
+
 		  /* Leap seconds cannot occur before the Epoch,
 		     or out of order.  */
 		  if (tr <= prevtr)
 		    return EINVAL;
+
+		  /* To avoid other botches in this code, each leap second's
+		     correction must differ from the previous one's by 1
+		     second or less, except that the first correction can be
+		     any value; these requirements are more generous than
+		     RFC 8536, to allow future RFC extensions.  */
+		  if (! (i == 0
+			 || (prevcorr < corr
+			     ? corr == prevcorr + 1
+			     : (corr == prevcorr
+				|| corr == prevcorr - 1))))
+		    return EINVAL;
+		  prevtr = tr;
+		  prevcorr = corr;
+
 		  if (tr <= TIME_T_MAX) {
-		    /* To avoid other botches in this code, each leap second's
-		       correction must differ from the previous one's by 1
-		       second or less, except that the first correction can be
-		       any value; these requirements are more generous than
-		       RFC 8536, to allow future RFC extensions.  */
-		    if (! (i == 0
-			   || (prevcorr < corr
-			       ? corr == prevcorr + 1
-			       : (corr == prevcorr
-				  || corr == prevcorr - 1))))
-		      return EINVAL;
-		    sp->lsis[leapcnt].ls_trans = prevtr = tr;
-		    sp->lsis[leapcnt].ls_corr = prevcorr = corr;
+		    sp->lsis[leapcnt].ls_trans = tr;
+		    sp->lsis[leapcnt].ls_corr = corr;
 		    leapcnt++;
 		  }
 		}
@@ -573,13 +588,14 @@ tzloadbody(char const *name, struct state *sp, bool doextend,
 				ttisp->tt_ttisut = *p++;
 			}
 		}
-		/*
-		** If this is an old file, we're done.
-		*/
-		if (up->tzhead.tzh_version[0] == '\0')
-			break;
-		nread -= p - up->buf;
-		memmove(up->buf, p, nread);
+	    }
+
+	    nread -= p - up->buf;
+	    memmove(up->buf, p, nread);
+
+	    /* If this is an old file, we're done.  */
+	    if (!version)
+	      break;
 	}
 	if (doextend && nread > 2 &&
 		up->buf[0] == '\n' && up->buf[nread - 1] == '\n' &&
