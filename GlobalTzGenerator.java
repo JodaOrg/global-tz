@@ -6,18 +6,13 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.nio.file.StandardOpenOption.WRITE;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,122 +20,31 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * Generates the global-tz from the IANA tz.
+ * Generator for global-tz from iana-tz.
  */
-public class GenerateGlobalTz {
+public class GlobalTzGenerator {
 
     private static final String RULE = "Rule";
     private static final String ZONE = "Zone";
-    private static final Path IANA_DIR = Path.of("iana");
-    private static final Path GLOBAL_DIR = Path.of("global");
 
+    // the work directory for iana-tz
+    private Path ianaDir;
+    // the work directory for global-tz
+    private Path globalDir;
     // in-memory store of the mutable files
     private final Map<String, LoadedFile> fileMap = new HashMap<>();
     // in-memory copy of backzone
     private LoadedFile backzone;
 
-    //-----------------------------------------------------------------------
-    /**
-     * Main entry point.
-     * 
-     * @param args ignored
-     */
-    public static void main(String[] args) {
-        try {
-            var generator = new GenerateGlobalTz();
-            generator.init();
-            System.out.println("Cloning");
-            generator.gitClone("https://github.com/eggert/tz.git", IANA_DIR);
-            generator.gitClone("https://github.com/JodaOrg/global-tz.git", GLOBAL_DIR);
-            System.out.println("Generating");
-            generator.generate();
-            System.out.println("Writing");
-            generator.write();
-            System.out.println("Committing");
-            generator.gitCommit();
-            System.out.println("Pushing");
-            generator.gitPush();
-            System.out.println("Done");
-            System.exit(0);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            System.exit(1);
-        }
-    }
-
     // constructor
-    private GenerateGlobalTz() {
-    }
-
-    //-----------------------------------------------------------------------
-    // initializes the directory structure
-    private void init() throws Exception {
-        Files.createDirectories(IANA_DIR);
-        deleteTree(IANA_DIR);
-        Files.createDirectories(GLOBAL_DIR);
-        deleteTree(GLOBAL_DIR);
-    }
-
-    // deletes a subdirectory tree
-    private void deleteTree(Path path) throws IOException {
-        if (Files.exists(path)) {
-            try (var walkStream = Files.walk(path)) {
-                walkStream.sorted(Comparator.reverseOrder())
-                        .map(Path::toFile)
-                        .forEach(File::delete);
-            }
-        }
-    }
-
-    //-----------------------------------------------------------------------
-    // performs git clone
-    private void gitClone(String repo, Path path) throws Exception {
-        var pb = new ProcessBuilder("git", "clone", repo, path.toString());
-        if (executeCommand(pb) != 0) {
-            throw new IllegalStateException("Git clone failed");
-        }
-    }
-
-    // performs git commit
-    private void gitCommit() throws Exception {
-        var pb1 = new ProcessBuilder("git", "add", "-A");
-        pb1.directory(GLOBAL_DIR.toFile());
-        if (executeCommand(pb1) != 0) {
-            throw new IllegalStateException("Git add failed");
-        }
-        var pb2 = new ProcessBuilder("git", "commit", "-m", "\"Generated global-tz " + Instant.now() + "\"");
-        pb2.directory(GLOBAL_DIR.toFile());
-        if (executeCommand(pb2) != 0) {
-            throw new IllegalStateException("Git commit failed");
-        }
-    }
-
-    // performs git push
-    private void gitPush() throws Exception {
-        var pb1 = new ProcessBuilder("git", "push");
-        pb1.directory(GLOBAL_DIR.toFile());
-        if (executeCommand(pb1) != 0) {
-            throw new IllegalStateException("Git push failed");
-        }
-    }
-
-    // executes a process
-    private int executeCommand(ProcessBuilder pb) throws Exception {
-        pb.redirectErrorStream(true);
-        var process = pb.start();
-        var reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        var line = "";
-        while ((line = reader.readLine()) != null) {
-            System.out.println("git: " + line);
-        }
-        process.waitFor();
-        return process.exitValue();
+    GlobalTzGenerator(Path ianaDir, Path globalDir) {
+        this.ianaDir = ianaDir;
+        this.globalDir = globalDir;
     }
 
     //-----------------------------------------------------------------------
     // loads the actions file and generates global-tz
-    private void generate() throws IOException {
+    void generate() throws IOException {
         // read the actions file
         var actionLines = Files.readAllLines(Path.of("actions.txt"));
 
@@ -195,38 +99,46 @@ public class GenerateGlobalTz {
 
     //-----------------------------------------------------------------------
     // write all files
-    private void write() throws IOException {
+    void write() throws IOException {
         // copy latest IANA state
-        Files.walkFileTree(IANA_DIR, new SimpleFileVisitor<Path>() {
+        Files.walkFileTree(ianaDir, new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                return dir.equals(IANA_DIR) ? FileVisitResult.CONTINUE : FileVisitResult.SKIP_SUBTREE;
+                return dir.equals(ianaDir) ? FileVisitResult.CONTINUE : FileVisitResult.SKIP_SUBTREE;
             }
 
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                if (!file.getFileName().toString().equals(".gitignore")) {
-                    Files.copy(file, GLOBAL_DIR.resolve(file.getFileName()), COPY_ATTRIBUTES, REPLACE_EXISTING);
+                if (isFileToBeCopied(file)) {
+                    Files.copy(file, globalDir.resolve(file.getFileName()), COPY_ATTRIBUTES, REPLACE_EXISTING);
                 }
                 return FileVisitResult.CONTINUE;
             }
         });
         // write our changes
         for (var file : fileMap.values()) {
-            Files.write(GLOBAL_DIR.resolve(file.fileName), file.lines, WRITE, TRUNCATE_EXISTING);
+            Files.write(globalDir.resolve(file.fileName), file.lines, WRITE, TRUNCATE_EXISTING);
         }
+    }
+
+    // is the file skipped
+    static boolean isFileToBeCopied(Path file) {
+        return Files.isRegularFile(file) &&
+                !file.toString().contains(".git") &&
+                !file.getFileName().toString().equals(".gitignore") &&
+                !file.getFileName().toString().startsWith("README");
     }
 
     //-----------------------------------------------------------------------
     // loads the file into the cache if it is not already there
     private LoadedFile ensureFileLoaded(String fileName) throws IOException {
         if (backzone == null) {
-            var lines = Files.readAllLines(IANA_DIR.resolve("backzone"));
+            var lines = Files.readAllLines(ianaDir.resolve("backzone"));
             backzone = new LoadedFile("backzone", lines, null);
             fileMap.put("backzone", backzone);
         }
         if (!fileMap.containsKey(fileName)) {
-            var lines = Files.readAllLines(IANA_DIR.resolve(fileName));
+            var lines = Files.readAllLines(ianaDir.resolve(fileName));
             fileMap.put(fileName, new LoadedFile(fileName, lines, backzone));
         }
         return fileMap.get(fileName);
