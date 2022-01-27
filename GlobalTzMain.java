@@ -44,10 +44,6 @@ public class GlobalTzMain {
             var main = new GlobalTzMain();
 
             main.init();
-            System.out.println("Cloning");
-            main.gitClone("https://github.com/eggert/tz.git", IANA_DIR);
-            main.gitClone("https://github.com/JodaOrg/global-tz.git", GLOBAL_DIR);
-
             System.out.println("Preparing");
             main.gitGlobalTz("git", "checkout", "iana-tz");
             var lastMessage = main.gitLastMessage(GLOBAL_DIR);
