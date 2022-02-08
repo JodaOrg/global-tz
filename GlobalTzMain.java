@@ -7,7 +7,6 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.nio.file.StandardOpenOption.WRITE;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
@@ -18,7 +17,6 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +41,6 @@ public class GlobalTzMain {
         try {
             var main = new GlobalTzMain();
 
-            main.init();
             System.out.println("Preparing");
             main.gitGlobalTz("git", "checkout", "iana-tz");
             var lastMessage = main.gitLastMessage(GLOBAL_DIR);
@@ -113,34 +110,6 @@ public class GlobalTzMain {
     }
 
     //-----------------------------------------------------------------------
-    // initializes the directory structure
-    private void init() throws Exception {
-        Files.createDirectories(IANA_DIR);
-        deleteTree(IANA_DIR);
-        Files.createDirectories(GLOBAL_DIR);
-        deleteTree(GLOBAL_DIR);
-    }
-
-    // deletes a subdirectory tree
-    private void deleteTree(Path path) throws IOException {
-        if (Files.exists(path)) {
-            try (var walkStream = Files.walk(path)) {
-                walkStream.sorted(Comparator.reverseOrder())
-                        .map(Path::toFile)
-                        .forEach(File::delete);
-            }
-        }
-    }
-
-    //-----------------------------------------------------------------------
-    // performs git clone
-    private void gitClone(String repo, Path path) throws Exception {
-        var pb = new ProcessBuilder("git", "clone", repo, path.toString());
-        if (executeCommand(pb) != 0) {
-            throw new IllegalStateException("Git clone failed");
-        }
-    }
-
     // copies iana-tz
     private void copyIanaTz() throws Exception {
         try (var walkStream = Files.walk(IANA_DIR)) {
