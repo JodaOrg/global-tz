@@ -60,10 +60,10 @@ public class GlobalTzMain {
                 System.out.println("Process: " + idToProcess);
 
                 main.gitIanaTz("git", "checkout", idToProcess);
+                var msg = main.gitLastMessage(IANA_DIR);
                 main.gitGlobalTz("git", "checkout", "iana-tz");
                 main.copyIanaTz();
-                //                var latestRealIanaId = main.gitRevParse(IANA_DIR);
-                main.gitCommit("\"Reset to iana-tz " + idToProcess + "\"");
+                main.gitCommit(msg + "\n\nReset to iana-tz " + idToProcess);
                 var latestIanaId = main.gitRevParse(GLOBAL_DIR);
 
                 System.out.println("Generating");
@@ -73,7 +73,7 @@ public class GlobalTzMain {
                 generator.write();
 
                 System.out.println("Merging");
-                main.gitCommit("\"Generated global-tz " + Instant.now() + "\"");
+                main.gitCommit("Generated global-tz " + Instant.now());
                 var generatedIdIanaBranch = main.gitRevParse(GLOBAL_DIR);
                 main.gitGlobalTz("git", "checkout", "main");
                 // all this rubbish because there is no "-s theirs"
