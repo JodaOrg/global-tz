@@ -39,32 +39,35 @@ public class GlobalTzMain {
      */
     public static void main(String[] args) {
         try {
-            var main = new GlobalTzMain();
+            var tool = new GlobalTzMain();
 
             System.out.println("Preparing");
-            main.gitGlobalTz("git", "checkout", "iana-tz");
-            var lastMessage = main.gitLastMessage(GLOBAL_DIR);
-            if (!lastMessage.startsWith("Reset to iana-tz ")) {
+            tool.gitGlobalTz("git", "checkout", "iana-tz");
+            var lastMessage = tool.gitLastMessage(GLOBAL_DIR);
+            int resetPos = lastMessage.indexOf("Reset to iana-tz ");
+            if (resetPos < 0) {
                 throw new IllegalStateException("Unexpected message on IANA branch: " + lastMessage);
             }
-            var lastProcessedIanaId = lastMessage.substring(17);
+            var lastProcessedIanaId = lastMessage.substring(resetPos + 17);
+            System.out.println("Starting from IANA " + lastProcessedIanaId);
             var idsToProcess = new ArrayList<String>();
-            var id = main.gitRevParse(IANA_DIR);
+            var id = tool.gitRevParse(IANA_DIR);
             while (!id.equals(lastProcessedIanaId)) {
                 idsToProcess.add(0, id);
-                main.gitIanaTz("git", "checkout", "HEAD~1");
-                id = main.gitRevParse(IANA_DIR);
+                tool.gitIanaTz("git", "checkout", "HEAD~1");
+                id = tool.gitRevParse(IANA_DIR);
             }
-            System.out.println(idsToProcess);
+            System.out.println("Processing " + idsToProcess.size() + " IANA commits");
             for (var idToProcess : idsToProcess) {
                 System.out.println("Process: " + idToProcess);
 
-                main.gitIanaTz("git", "checkout", idToProcess);
-                var msg = main.gitLastMessage(IANA_DIR);
-                main.gitGlobalTz("git", "checkout", "iana-tz");
-                main.copyIanaTz();
-                main.gitCommit(msg + "\n\nReset to iana-tz " + idToProcess);
-                var latestIanaId = main.gitRevParse(GLOBAL_DIR);
+                tool.gitIanaTz("git", "checkout", idToProcess);
+                var msg = tool.gitLastMessage(IANA_DIR);
+                msg = msg.indexOf('\n') < 0 ? msg : msg.substring(0, msg.indexOf('\n'));
+                tool.gitGlobalTz("git", "checkout", "iana-tz");
+                tool.copyIanaTz();
+                tool.gitCommit(msg.replace("\"", "\\\"") + "\n\nReset to iana-tz " + idToProcess);
+                var latestIanaId = tool.gitRevParse(GLOBAL_DIR);
 
                 System.out.println("Generating");
                 // new generator needed each time
@@ -73,28 +76,28 @@ public class GlobalTzMain {
                 generator.write();
 
                 System.out.println("Merging");
-                main.gitCommit("Generated global-tz " + Instant.now());
-                var generatedIdIanaBranch = main.gitRevParse(GLOBAL_DIR);
-                main.gitGlobalTz("git", "checkout", "main");
+                tool.gitCommit("Generated global-tz " + Instant.now());
+                var generatedIdIanaBranch = tool.gitRevParse(GLOBAL_DIR);
+                tool.gitGlobalTz("git", "checkout", "global-tz");
                 // all this rubbish because there is no "-s theirs"
-                main.gitGlobalTz("git", "merge", "-s", "ours", latestIanaId);
-                main.gitGlobalTz("git", "branch", "temp");
-                main.gitGlobalTz("git", "reset", "--hard", latestIanaId);
-                main.gitGlobalTz("git", "reset", "--soft", "temp");
-                main.gitGlobalTz("git", "commit", "--amend", "-C", generatedIdIanaBranch);
-                main.gitGlobalTz("git", "branch", "-D", "temp");
+                tool.gitGlobalTz("git", "merge", "-s", "ours", latestIanaId);
+                tool.gitGlobalTz("git", "branch", "temp");
+                tool.gitGlobalTz("git", "reset", "--hard", latestIanaId);
+                tool.gitGlobalTz("git", "reset", "--soft", "temp");
+                tool.gitGlobalTz("git", "commit", "--amend", "-C", generatedIdIanaBranch);
+                tool.gitGlobalTz("git", "branch", "-D", "temp");
                 // cherry-pick the generated code and set it as the state of the merge commit
-                main.gitGlobalTz("git", "cherry-pick", generatedIdIanaBranch, "-x");
-                main.gitGlobalTz("git", "reset", "--soft", "HEAD~1");
-                main.gitGlobalTz("git", "commit", "--amend", "-C", generatedIdIanaBranch);
+                tool.gitGlobalTz("git", "cherry-pick", generatedIdIanaBranch, "-x");
+                tool.gitGlobalTz("git", "reset", "--soft", "HEAD~1");
+                tool.gitGlobalTz("git", "commit", "--amend", "-C", generatedIdIanaBranch);
                 // tidy up iana-tz branch
-                main.gitGlobalTz("git", "checkout", "iana-tz");
-                main.gitGlobalTz("git", "reset", "--hard", latestIanaId);
+                tool.gitGlobalTz("git", "checkout", "iana-tz");
+                tool.gitGlobalTz("git", "reset", "--hard", latestIanaId);
 
                 System.out.println("Pushing");
-                main.gitGlobalTz("git", "push");
-                main.gitGlobalTz("git", "checkout", "main");
-                main.gitGlobalTz("git", "push");
+                tool.gitGlobalTz("git", "push");
+                tool.gitGlobalTz("git", "checkout", "global-tz");
+                tool.gitGlobalTz("git", "push");
             }
             System.out.println("Done");
             System.exit(0);
@@ -145,21 +148,25 @@ public class GlobalTzMain {
 
     // finds the last commit message
     private String gitLastMessage(Path path) throws Exception {
-        var pb = new ProcessBuilder("git", "log", "-1", "--pretty=%s");
+        var pb = new ProcessBuilder("git", "log", "-1", "--pretty=%B");
         pb.directory(path.toFile());
         pb.redirectErrorStream(true);
         var process = pb.start();
         var reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         var line = "";
-        var hash = "";
+        var text = "";
         while ((line = reader.readLine()) != null) {
             System.out.println("git: " + line);
-            if (hash.isEmpty()) {
-                hash = line;
+            if (!text.isEmpty()) {
+                text = text + "\n";
             }
+            text = text + line;
         }
         process.waitFor();
-        return hash;
+        if (text.endsWith("\n")) {
+            text = text.substring(0, text.length() - 1);
+        }
+        return text;
     }
 
     // performs git commit

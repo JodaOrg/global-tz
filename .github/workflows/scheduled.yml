@@ -1,0 +1,42 @@
+name: Scheduled TZDB check
+
+on:
+  schedule:
+    - cron:  '20 1,13 * * *'
+
+jobs:
+  scheduled-tzdb-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Git setup
+      run: |
+        git config --global user.email "scolebourne@joda.org"
+        git config --global user.name "Stephen Colebourne"
+        git config --global advice.detachedHead false
+        git config --global init.defaultBranch "main"
+    - name: Checkout global-tz
+      uses: actions/checkout@v2
+      with:
+        ref: 'main'
+        fetch-depth: 0
+    - name: Checkout global-tz
+      uses: actions/checkout@v2
+      with:
+        path: 'global'
+        ref: 'global-tz'
+        fetch-depth: 0
+    - name: Checkout iana-tz
+      uses: actions/checkout@v2
+      with:
+        repository: 'eggert/tz'
+        path: 'iana'
+        fetch-depth: 0
+    - uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        check-latest: true
+    - name: Execute
+      run: |
+        java GlobalTzMain.java
