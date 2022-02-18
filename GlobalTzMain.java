@@ -14,6 +14,7 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Generates the global-tz from the IANA tz.
@@ -98,6 +101,33 @@ public class GlobalTzMain {
                 tool.gitGlobalTz("git", "push");
                 tool.gitGlobalTz("git", "checkout", "global-tz");
                 tool.gitGlobalTz("git", "push");
+            }
+            if (idsToProcess.size() > 0) {
+                System.out.println("Updating READNE");
+                var lastId = idsToProcess.get(idsToProcess.size() - 1);
+                var now = Instant.now();
+                tool.gitGlobalTz("git", "checkout", "main");
+                var readmePath = Path.of("README.md");
+                var readmeLines = Files.lines(readmePath)
+                        .collect(Collectors.toCollection(() -> new ArrayList<String>()));
+                var generatedIndex = IntStream.range(0, readmeLines.size())
+                        .filter(index -> readmeLines.get(index)
+                                .startsWith("The Global Time Zone Database was last generated at "))
+                        .findFirst()
+                        .orElseThrow();
+                readmeLines.set(
+                        generatedIndex,
+                        "The Global Time Zone Database was last generated at " + now + ".");
+                var idIndex = IntStream.range(0, readmeLines.size())
+                        .filter(index -> readmeLines.get(index)
+                                .startsWith("It is up to date with commit "))
+                        .findFirst()
+                        .orElseThrow();
+                readmeLines.set(
+                        idIndex,
+                        "It is up to date with commit " + lastId + " from the IANA Time Zone database.");
+                Files.write(readmePath, readmeLines, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+                tool.gitCommit("Generated global-tz " + now);
             }
             System.out.println("Done");
             System.exit(0);

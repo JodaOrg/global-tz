@@ -5,6 +5,11 @@
 The Global Time Zone Database files can be found on the [global-tz](https://github.com/JodaOrg/global-tz/tree/global-tz) branch.
 This branch contains the tool that generates the database.
 
+## Status
+
+The Global Time Zone Database was last generated at .
+It is up to date with commit  from the IANA Time Zone database.
+
 
 ## Rationale
 
