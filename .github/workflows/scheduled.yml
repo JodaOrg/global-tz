@@ -1,8 +1,11 @@
 name: Scheduled TZDB check
 
 on:
+  push:
+    branches:
+      - 'main'
   schedule:
-    - cron:  '20 1,13 * * *'
+    - cron: '20 1,13 * * *'
 
 jobs:
   scheduled-tzdb-check:

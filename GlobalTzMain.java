@@ -98,16 +98,16 @@ public class GlobalTzMain {
                 tool.gitGlobalTz("git", "reset", "--hard", latestIanaId);
 
                 System.out.println("Pushing");
-                tool.gitGlobalTz("git", "push");
+                tool.gitPush();
                 tool.gitGlobalTz("git", "checkout", "global-tz");
-                tool.gitGlobalTz("git", "push");
+                tool.gitPush();
             }
             if (idsToProcess.size() > 0) {
                 System.out.println("Updating READNE");
                 var lastId = idsToProcess.get(idsToProcess.size() - 1);
                 var now = Instant.now();
                 tool.gitGlobalTz("git", "checkout", "main");
-                var readmePath = Path.of("README.md");
+                var readmePath = GLOBAL_DIR.resolve("README.md");
                 var readmeLines = Files.lines(readmePath)
                         .collect(Collectors.toCollection(() -> new ArrayList<String>()));
                 var generatedIndex = IntStream.range(0, readmeLines.size())
@@ -128,6 +128,7 @@ public class GlobalTzMain {
                         "It is up to date with commit " + lastId + " from the IANA Time Zone database.");
                 Files.write(readmePath, readmeLines, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
                 tool.gitCommit("Generated global-tz " + now);
+                tool.gitPush();
             }
             System.out.println("Done");
             System.exit(0);
@@ -211,6 +212,11 @@ public class GlobalTzMain {
         if (executeCommand(pb2) != 0) {
             throw new IllegalStateException("Git commit failed");
         }
+    }
+
+    // performs git push
+    private void gitPush() throws Exception {
+        gitGlobalTz("git", "push");
     }
 
     // performs git
