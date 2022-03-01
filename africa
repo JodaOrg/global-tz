@@ -169,7 +169,8 @@ Zone Africa/Kinshasa	1:01:12 -	LMT	1897 Nov  9
 			1:00	-	WAT
 
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone Africa/Lubumbashi	1:49:52 -	LMT	1897 Nov 9
+Zone Africa/Lubumbashi	1:49:52 -	LMT	1897 Nov  9
+     			1:00	-	WAT	1920 Apr 25
 			2:00	-	CAT
 
 # Republic of the Congo
