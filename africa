@@ -995,6 +995,10 @@ Zone	Indian/Mayotte	3:00:56 -	LMT	1911 Jul # Mamoutzou
 #         (car (cdr (cdr a))) (calendar-month-name (car a) t) (car (cdr a))
 #         (car (cdr (cdr b))) (calendar-month-name (car b) t) (car (cdr b)))))
 #     (setq islamic-year (+ 1 islamic-year))))
+#
+# From Milamber (2021-03-31, 2022-03-10), confirming these predictions:
+# https://www.mmsp.gov.ma/fr/actualites.aspx?id=2076
+# https://www.ecoactu.ma/horaires-administration-ramadan-gmtheure-gmt-a-partir-de-dimanche-27-mars/
 
 # Rule	NAME	FROM	TO	-	IN	ON	AT	SAVE	LETTER/S
 Rule	Morocco	1939	only	-	Sep	12	 0:00	1:00	-
