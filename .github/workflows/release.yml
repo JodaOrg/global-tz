@@ -1,0 +1,55 @@
+name: Global release
+
+on:
+  push:
+    tags:
+      - '20*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Git setup
+      run: |
+        git config --global user.email "scolebourne@joda.org"
+        git config --global user.name "Stephen Colebourne"
+        git config --global advice.detachedHead false
+        git config --global init.defaultBranch "main"
+    - name: Checkout global-tz
+      uses: actions/checkout@v2
+      with:
+        ref: 'global-tz'
+    - name: Find version
+      run: |
+        echo "TAG_VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+    - name: Install lzip
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y lzip
+    - name: Build
+      run: |
+        echo ${{ env.TAG_VERSION }}
+        mv README.md README
+        ls -la
+        make check tarballs VERSION="${{ env.TAG_VERSION }}" ZONETABLES="zone.tab"
+        sha512sum tzcode${{ env.TAG_VERSION }}.tar.gz > tzcode${{ env.TAG_VERSION }}.tar.gz.sha512
+        sha512sum tzdata${{ env.TAG_VERSION }}.tar.gz > tzdata${{ env.TAG_VERSION }}.tar.gz.sha512
+        sha512sum tzdb-${{ env.TAG_VERSION }}.tar.lz > tzdb-${{ env.TAG_VERSION }}.tar.lz.sha512
+        sha512sum tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz > tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz.sha512
+        ls -la
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        body: Release ${{ env.TAG_VERSION }} of global-tz, derived from iana-tz
+        files: |
+          tzcode${{ env.TAG_VERSION }}.tar.gz
+          tzcode${{ env.TAG_VERSION }}.tar.gz.sha512
+          tzdata${{ env.TAG_VERSION }}.tar.gz
+          tzdata${{ env.TAG_VERSION }}.tar.gz.sha512
+          tzdb-${{ env.TAG_VERSION }}.tar.lz
+          tzdb-${{ env.TAG_VERSION }}.tar.lz.sha512
+          tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz
+          tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz.sha512
+
+# ZONETABLES is set to remove zone1970.tab, as the Makefile validation doesn't cover our use case
+# README.md has to be renamed to README for Makefile to work
