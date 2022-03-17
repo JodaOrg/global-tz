@@ -59,7 +59,7 @@ The approach taken supports full time zone data according to these basic rules:
 
 * An identifier for each region of the world where clocks have differed since 1970-01-01.
 * At least one identifier for each inhabited [ISO 3166-1 code](https://en.wikipedia.org/wiki/ISO_3166-1).
-* For these identifiers the data returned shall be the best available, including pre-19070 history.
+* For these identifiers the data returned shall be the best available, including pre-1970 history.
 
 In addition to the supported set of identifiers derived from the rules above, other identifiers from the IANA database are made available.
 These do not necessarily follow the "best available" rule.
