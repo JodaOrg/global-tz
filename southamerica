@@ -1404,6 +1404,8 @@ Zone	America/Curacao	-4:35:47 -	LMT	1912 Feb 12 # Willemstad
 			-4:30	-	-0430	1965
 			-4:00	-	AST
 
+Link	America/Curacao	America/Kralendijk
+Link	America/Curacao	America/Lower_Princes
 #
 # From Arthur David Olson (2011-06-15):
 # use links for places with new iso3166 codes.
@@ -1731,6 +1733,8 @@ Zone America/Paramaribo	-3:40:40 -	LMT	1911
 Zone America/Port_of_Spain -4:06:04 -	LMT	1912 Mar 2
 			-4:00	-	AST
 
+Link	America/Port_of_Spain	America/Marigot
+Link	America/Port_of_Spain	America/St_Barthelemy
 # Uruguay
 # From Paul Eggert (1993-11-18):
 # Uruguay wins the prize for the strangest peacetime manipulation of the rules.

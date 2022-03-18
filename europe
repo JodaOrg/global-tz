@@ -497,6 +497,13 @@ Rule	GB-Eire 1990	1995	-	Oct	Sun>=22	1:00u	0	GMT
 # Summer Time Order 1997 (S.I. 1997/2982)
 # See EU for rules starting in 1996.
 #
+
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	Europe/London	-0:01:15 -	LMT	1847 Dec  1  0:00s
+			 0:00	GB-Eire	%s	1968 Oct 27
+			 1:00	-	BST	1971 Oct 31  2:00u
+			 0:00	GB-Eire	%s	1996
+			 0:00	EU	GMT/BST
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
 Zone	Europe/Jersey	-0:08:26 -	LMT	1898 Jun 11 16:00u
 			 0:00	GB-Eire	%s	1940 Jul  2
@@ -517,13 +524,6 @@ Zone	Europe/Guernsey	-0:10:09 -	LMT	1913 Jun 18
 
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
 Zone Europe/Isle_of_Man	-0:17:55 -	LMT	1883 Mar 30  0:00s
-			 0:00	GB-Eire	%s	1968 Oct 27
-			 1:00	-	BST	1971 Oct 31  2:00u
-			 0:00	GB-Eire	%s	1996
-			 0:00	EU	GMT/BST
-
-# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Europe/London	-0:01:15 -	LMT	1847 Dec  1  0:00s
 			 0:00	GB-Eire	%s	1968 Oct 27
 			 1:00	-	BST	1971 Oct 31  2:00u
 			 0:00	GB-Eire	%s	1996

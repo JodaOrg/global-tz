@@ -3055,7 +3055,7 @@ Zone Atlantic/Bermuda	-4:19:18 -	LMT	1890	# Hamilton
 			-4:00	US	A%sT
 
 # Caribbean Netherlands
-Link	America/Curacao	America/Kralendijk
+# See America/Kralendijk in southamerica.
 
 # Cayman Is
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
@@ -3350,9 +3350,9 @@ Zone America/Guadeloupe	-4:06:08 -	LMT	1911 Jun  8 # Pointe-à-Pitre
 			-4:00	 -	AST
 
 # St Barthélemy
-Link	America/Port_of_Spain	America/St_Barthelemy
+# See America/St_Barthelemy in southamerica.
 # St Martin (French part)
-Link	America/Port_of_Spain	America/Marigot
+# See America/Marigot in southamerica.
 
 # Guatemala
 #
@@ -3651,7 +3651,7 @@ Zone America/St_Vincent	-4:04:56 -	LMT	1890 # Kingstown
 
 
 # Sint Maarten
-Link	America/Curacao	America/Lower_Princes
+# See America/Lower_Princes in southamerica.
 
 # Turks and Caicos
 #
