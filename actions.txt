@@ -97,8 +97,8 @@ Remove Link Africa/Lagos Africa/Douala
 # Ensure CD has own primary data, not links outside of CD
 Find Line # Democratic Republic of the Congo
 Reinstate Zone Africa/Kinshasa
-Remove Link Africa/Lagos Africa/Kinshasa
 Reinstate Zone Africa/Lubumbashi
+Remove Link Africa/Lagos Africa/Kinshasa
 Remove Link Africa/Maputo Africa/Lubumbashi
 
 # Ensure GA has own primary data, not a link to a different ISO-3166-1 code
@@ -221,6 +221,7 @@ Edit antarctica
 
 #--------------------------------------
 # Ensure AQ has own data, not a link to a different ISO-3166-1 code
+# Antarctica/McMurdo
 
 Find Line # Dumont d'Urville - see Pacific/Port_Moresby.
 Replace Line # Dumont d'Urville, Île des Pétrels, -6640+14001, since 1956-11
@@ -231,18 +232,18 @@ Add Line # Syowa (also known as Showa), -690022+0393524, since 1957
 Reinstate Zone Antarctica/Syowa
 Remove Lines # See Asia/Riyadh
 
-Find Line # See 'australasia' for Antarctica/McMurdo.
-Replace Line # McMurdo, Ross Island, since 1955-12
-Reinstate Zone Antarctica/McMurdo
-
 #--------------------------------------
 # Tidy links elsewhere
 Edit asia
 Remove Link Asia/Riyadh Antarctica/Syowa
 
 Edit australasia
-Remove Link Pacific/Auckland Antarctica/McMurdo
 Remove Link Pacific/Port_Moresby Antarctica/DumontDUrville
+
+# McMurdo references NZ rules so must be in australasia file
+Remove Link Pacific/Auckland Antarctica/McMurdo
+Reinstate Zone Antarctica/McMurdo
+
 
 Edit backward
 Reinstate Link Antarctica/McMurdo Antarctica/South_Pole
@@ -346,18 +347,13 @@ Ensure Link Europe/Helsinki Europe/Mariehamn
 # Zones linked to Europe/London
 Remove Lines # See Europe/London
 
-# Ensure JE has own data, not a link to a different ISO-3166-1 code
-Find Line # Use Europe/London for Jersey, Guernsey, and the Isle of Man.
-Reinstate Zone Europe/Jersey
+# Ensure JE/GG/IM have own data, not a link to a different ISO-3166-1 code
 Remove Link Europe/London Europe/Jersey
-
-# Ensure GG has own data, not a link to a different ISO-3166-1 code
-Reinstate Zone Europe/Guernsey
+Reinstate Zone Europe/Jersey
 Remove Link Europe/London Europe/Guernsey
-
-# Ensure IM has own data, not a link to a different ISO-3166-1 code
-Reinstate Zone Europe/Isle_of_Man
+Reinstate Zone Europe/Guernsey
 Remove Link Europe/London Europe/Isle_of_Man
+Reinstate Zone Europe/Isle_of_Man
 Remove Lines # Use Europe/London for Jersey, Guernsey, and the Isle of Man.
 
 #--------------------------------------
@@ -464,13 +460,11 @@ Remove Link America/Puerto_Rico America/Antigua
 
 # No backzone data is available for BQ, so a Link is the best available data
 Find Line # Caribbean Netherlands
-Add Link America/Curacao America/Kralendijk
-Remove Link America/Puerto_Rico America/Kralendijk
+Add Line # See America/Kralendijk in southamerica.
 
 # No backzone data is available for SX, so a Link is the best available data
 Find Line # Sint Maarten
-Add Link America/Curacao America/Lower_Princes
-Remove Link America/Puerto_Rico America/Lower_Princes
+Add Line # See America/Lower_Princes in southamerica.
 
 # Ensure CA has own data, not a link to a different ISO-3166-1 code
 Find Line # See America/Puerto_Rico for east of Natashquan
@@ -494,8 +488,7 @@ Remove Link America/Puerto_Rico America/Guadeloupe
 
 # No backzone data is available for MF, so a Link is the best available data
 Find Line # St Martin
-Add Link America/Port_of_Spain America/Marigot
-Remove Link America/Puerto_Rico America/Marigot
+Add Line # See America/Marigot in southamerica.
 
 # Ensure MS has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Montserrat
@@ -504,8 +497,7 @@ Remove Link America/Puerto_Rico America/Montserrat
 
 # No backzone data is available for BL, so a Link is the best available data
 Find Line # St Barthélemy
-Add Link America/Port_of_Spain America/St_Barthelemy
-Remove Link America/Puerto_Rico America/St_Barthelemy
+Add Line # See America/St_Barthelemy in southamerica.
 
 # Ensure KN has own primary data, not a link to a different ISO-3166-1 code
 Find Line # St Kitts-Nevis
@@ -563,18 +555,37 @@ Find Line # Aruba
 Reinstate Zone America/Aruba
 
 # Ensure CW has own primary data, not a link to a different ISO-3166-1 code
+# No backzone data is available for BQ, so a Link is the best available data
+# No backzone data is available for SX, so a Link is the best available data
 Find Line # Curaçao
 Reinstate Zone America/Curacao
+Add Link America/Curacao America/Kralendijk
+Add Link America/Curacao America/Lower_Princes
 
 # Ensure TT has own primary data, not a link to a different ISO-3166-1 code
+# No backzone data is available for BL, so a Link is the best available data
+# No backzone data is available for MF, so a Link is the best available data
 Find Line # Trinidad and Tobago
 Reinstate Zone America/Port_of_Spain
+Add Link America/Port_of_Spain America/Marigot
+Add Link America/Port_of_Spain America/St_Barthelemy
+
 
 #--------------------------------------
 # Tidy links elsewhere
 Edit northamerica
 Remove Link America/Puerto_Rico America/Aruba
 Remove Link America/Puerto_Rico America/Curacao
+Remove Link America/Puerto_Rico America/Kralendijk
+Remove Link America/Puerto_Rico America/Lower_Princes
+Remove Link America/Puerto_Rico America/Marigot
 Remove Link America/Puerto_Rico America/Port_of_Spain
+Remove Link America/Puerto_Rico America/St_Barthelemy
+
+Edit backzone
+Remove Link America/Curacao America/Kralendijk
+Remove Link America/Curacao America/Lower_Princes
+Remove Link America/Port_of_Spain America/Marigot
+Remove Link America/Port_of_Spain America/St_Barthelemy
 
 #==========================================================

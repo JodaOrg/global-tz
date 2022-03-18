@@ -34,6 +34,9 @@ public class GlobalTzMain {
     private static final Path IANA_DIR = Path.of("iana");
     private static final Path GLOBAL_DIR = Path.of("global");
 
+    /** Set to true for local testing. */
+    private final boolean local;
+
     //-----------------------------------------------------------------------
     /**
      * Main entry point.
@@ -42,7 +45,15 @@ public class GlobalTzMain {
      */
     public static void main(String[] args) {
         try {
-            var tool = new GlobalTzMain();
+            // set false to true to run locally
+            var tool = new GlobalTzMain(false);
+
+            if (tool.local) {
+                var generator = new Generator(IANA_DIR, GLOBAL_DIR);
+                generator.generate();
+                generator.write();
+                System.exit(0);
+            }
 
             System.out.println("Preparing");
             tool.gitGlobalTz("git", "checkout", "iana-tz");
@@ -140,7 +151,8 @@ public class GlobalTzMain {
     }
 
     // constructor
-    private GlobalTzMain() {
+    private GlobalTzMain(boolean local) {
+        this.local = local;
     }
 
     //-----------------------------------------------------------------------
@@ -216,7 +228,9 @@ public class GlobalTzMain {
 
     // performs git push
     private void gitPush() throws Exception {
-        gitGlobalTz("git", "push");
+        if (!local) {
+            gitGlobalTz("git", "push");
+        }
     }
 
     // performs git
@@ -434,12 +448,14 @@ public class GlobalTzMain {
             private void resinstateRule(String searchName) {
                 var linesToCopy = backzone.findLines(RULE, searchName);
                 insertLines(RULE, "# Rule\tNAME\tFROM\tTO\t-\tIN\tON\tAT\tSAVE\tLETTER/S", linesToCopy);
+                linesToCopy.clear();
             }
 
             // reinstates the rule from backzone
             private void resinstateZone(String searchName) {
                 var linesToCopy = backzone.findLines(ZONE, searchName);
                 insertLines(ZONE, "# Zone\tNAME\t\tSTDOFF\tRULES\tFORMAT\t[UNTIL]", linesToCopy);
+                linesToCopy.clear();
             }
 
             // insert lines at the insert index
@@ -507,9 +523,14 @@ public class GlobalTzMain {
             // removes a link line
             private void removeLink(String linkPair) {
                 var pattern = Pattern.compile("Link[ \\t]+" + linkPair.replace(" ", "[ \\t]+") + "([ \\t].*|$)");
-                if (!lines.removeIf(line -> pattern.matcher(line).matches())) {
-                    throw new IllegalStateException("Remove Link failed to find 'Link " + linkPair + "'");
+                for (int i = 0; i < lines.size(); i++) {
+                    if (pattern.matcher(lines.get(i)).matches()) {
+                        lines.remove(i);
+                        insertIndex = i;
+                        return;
+                    }
                 }
+                throw new IllegalStateException("Remove Link failed to find 'Link " + linkPair + "'");
             }
 
             // ensures that the link specified exists
