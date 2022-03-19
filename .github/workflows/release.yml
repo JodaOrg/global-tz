@@ -3,7 +3,7 @@ name: Global release
 on:
   push:
     tags:
-      - '20*'
+      - '20*-release'
 
 jobs:
   release:
@@ -21,7 +21,9 @@ jobs:
         ref: 'global-tz'
     - name: Find version
       run: |
-        echo "TAG_VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+        MAIN_VERSION=${GITHUB_REF/refs\/tags\//}
+        ACTUAL_VERSION=${MAIN_VERSION%-release}
+        echo "TAG_VERSION=${ACTUAL_VERSION}" >> $GITHUB_ENV
     - name: Install lzip
       run: |
         sudo apt-get update -y
@@ -36,10 +38,16 @@ jobs:
         sha512sum tzdb-${{ env.TAG_VERSION }}.tar.lz > tzdb-${{ env.TAG_VERSION }}.tar.lz.sha512
         sha512sum tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz > tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz.sha512
         ls -la
+    - name: Tag
+      run: |
+        echo ${{ env.TAG_VERSION }}
+        git tag ${{ env.TAG_VERSION }} -a -m "Release ${{ env.TAG_VERSION }}"
+        git push origin ${{ env.TAG_VERSION }}
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
         body: Release ${{ env.TAG_VERSION }} of global-tz, derived from iana-tz
+        tag_name: ${{ env.TAG_VERSION }}
         files: |
           tzcode${{ env.TAG_VERSION }}.tar.gz
           tzcode${{ env.TAG_VERSION }}.tar.gz.sha512
