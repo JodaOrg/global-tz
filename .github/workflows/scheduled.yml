@@ -43,3 +43,13 @@ jobs:
     - name: Execute
       run: |
         java GlobalTzMain.java
+    - name: Install lzip
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y lzip
+    - name: Build
+      run: |
+        cd global
+        ls -la
+        make check tarballs VERSION="test" ZONETABLES="zone.tab"
+        ls -la

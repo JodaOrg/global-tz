@@ -1,7 +1,6 @@
 /*
  * This file is in the public domain.
  */
-import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.nio.file.StandardOpenOption.WRITE;
@@ -10,12 +9,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardOpenOption;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +30,23 @@ public class GlobalTzMain {
     private static final Path IANA_DIR = Path.of("iana");
     private static final Path GLOBAL_DIR = Path.of("global");
 
+    private static final List<String> README_HEADER = List.of(
+            "# Global Time Zone Database (global-tz)",
+            "",
+            "The Global Time Zone Database contains the history of how local time has changed around the world.",
+            "It is derived from data in the [IANA Time Zone Database](https://github.com/eggert/tz).",
+            "For many years this information could be reliably obtained from the IANA repository.",
+            "In recent years however, the data available by default from the IANA repository has been reduced.",
+            "This repository primarily exists to reinstate the data that has been effectively removed.",
+            "",
+            "For more info, please see the project home page:",
+            "https://github.com/JodaOrg/global-tz",
+            "",
+            "The original README is included below.",
+            "",
+            "-----",
+            "");
+
     /** Set to true for local testing. */
     private final boolean local;
 
@@ -45,7 +58,7 @@ public class GlobalTzMain {
      */
     public static void main(String[] args) {
         try {
-            // set false to true to run locally
+            // set to true to run locally
             var tool = new GlobalTzMain(false);
 
             if (tool.local) {
@@ -141,6 +154,7 @@ public class GlobalTzMain {
                 tool.gitCommit("Generated global-tz " + now);
                 tool.gitPush();
             }
+            tool.gitGlobalTz("git", "checkout", "global-tz");
             System.out.println("Done");
             System.exit(0);
 
@@ -168,6 +182,11 @@ public class GlobalTzMain {
                         }
                     });
         }
+        System.out.println("Generate README");
+        var readmePath = IANA_DIR.resolve("README");
+        var readmeLines = new ArrayList<String>(Files.readAllLines(readmePath));
+        readmeLines.addAll(0, README_HEADER);
+        Files.write(readmePath, readmeLines, WRITE, TRUNCATE_EXISTING);
     }
 
     // finds the ID
@@ -268,8 +287,7 @@ public class GlobalTzMain {
     static boolean isFileToBeCopied(Path file) {
         return Files.isRegularFile(file) &&
                 !file.toString().contains(".git") &&
-                !file.getFileName().toString().equals(".gitignore") &&
-                !file.getFileName().toString().startsWith("README");
+                !file.getFileName().toString().equals(".gitignore");
     }
 
     //-----------------------------------------------------------------------
@@ -354,21 +372,6 @@ public class GlobalTzMain {
         //-----------------------------------------------------------------------
         // write all files
         void write() throws IOException {
-            // copy latest IANA state
-            Files.walkFileTree(ianaDir, new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                    return dir.equals(ianaDir) ? FileVisitResult.CONTINUE : FileVisitResult.SKIP_SUBTREE;
-                }
-
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    if (isFileToBeCopied(file)) {
-                        Files.copy(file, globalDir.resolve(file.getFileName()), COPY_ATTRIBUTES, REPLACE_EXISTING);
-                    }
-                    return FileVisitResult.CONTINUE;
-                }
-            });
             // write our changes
             for (var file : fileMap.values()) {
                 Files.write(globalDir.resolve(file.fileName), file.lines, WRITE, TRUNCATE_EXISTING);
@@ -391,7 +394,7 @@ public class GlobalTzMain {
         }
 
         //-----------------------------------------------------------------------
-        class LoadedFile {
+        static class LoadedFile {
             private final String fileName;
             private final ArrayList<String> lines;
             private final LoadedFile backzone;
