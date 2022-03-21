@@ -28,6 +28,11 @@ jobs:
       run: |
         sudo apt-get update -y
         sudo apt-get install -y lzip
+    - name: Tag
+      run: |
+        echo ${{ env.TAG_VERSION }}
+        git tag ${{ env.TAG_VERSION }} -a -m "Release ${{ env.TAG_VERSION }}"
+        git push origin ${{ env.TAG_VERSION }}
     - name: Build
       run: |
         echo ${{ env.TAG_VERSION }}
@@ -39,11 +44,6 @@ jobs:
         sha512sum tzdb-${{ env.TAG_VERSION }}.tar.lz > tzdb-${{ env.TAG_VERSION }}.tar.lz.sha512
         sha512sum tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz > tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz.sha512
         ls -la
-    - name: Tag
-      run: |
-        echo ${{ env.TAG_VERSION }}
-        git tag ${{ env.TAG_VERSION }} -a -m "Release ${{ env.TAG_VERSION }}"
-        git push origin ${{ env.TAG_VERSION }}
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
