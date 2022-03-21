@@ -32,7 +32,8 @@ jobs:
       run: |
         echo ${{ env.TAG_VERSION }}
         ls -la
-        make check tarballs VERSION="${{ env.TAG_VERSION }}" ZONETABLES="zone.tab"
+        make check VERSION="${{ env.TAG_VERSION }}" ZONETABLES="zone.tab"
+        make tarballs VERSION="${{ env.TAG_VERSION }}"
         sha512sum tzcode${{ env.TAG_VERSION }}.tar.gz > tzcode${{ env.TAG_VERSION }}.tar.gz.sha512
         sha512sum tzdata${{ env.TAG_VERSION }}.tar.gz > tzdata${{ env.TAG_VERSION }}.tar.gz.sha512
         sha512sum tzdb-${{ env.TAG_VERSION }}.tar.lz > tzdb-${{ env.TAG_VERSION }}.tar.lz.sha512

@@ -51,5 +51,6 @@ jobs:
       run: |
         cd global
         ls -la
-        make check tarballs VERSION="test" ZONETABLES="zone.tab"
+        make check VERSION="test" ZONETABLES="zone.tab"
+        make tarballs VERSION="test"
         ls -la
