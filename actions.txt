@@ -1,6 +1,20 @@
 # This file lists the actions necessary to transform the IANA Time Zone Database to global-tz
 
-# This file is machine readable. It is structured by the file to be edited.
+# This file is machine readable.
+# There is one section for each file to be edited.
+# The commands are:
+# - "Edit <fileName>" - edit the file <fileName>
+# - "Remove Lines <textToMatch>" - remove all lines that start with <textToMatch>
+# - "Replace Line <newLine>" - replace the current line with <newLine>
+# - "Insert Line <newLine>" - insert <newLine> before the current line
+# - "Add Line <newLine>" - add <newLine> after the current line
+# - "Find Line <textToMatch>" - finds the first line that starts with <textToMatch>
+# - "Reinstate Rule <name>" - finds the rule <name> in backzone and copies the data
+# - "Reinstate Zone <name>" - finds the zone <name> in backzone and copies the data
+# - "Reinstate Link <linkPair>" - finds the link to the second part of <linkPair> and change the target
+# - "Add Link <linkPair>" - adds the link <linkPair> after the current line
+# - "Remove Link <linkPair>" - finds and removes the link <linkPair>
+# - "Ensure Link <linkPair>" - ensures that the link <linkPair> exists
 
 #==========================================================
 Edit africa
@@ -322,13 +336,6 @@ Remove Link Pacific/Pago_Pago Pacific/Midway
 Edit europe
 
 #--------------------------------------
-# These Links are between places with a strong connection due to history, culture or sovereighty.
-# Separate data has never been available
-
-# Europe/Busingen (DE) links to Europe/Zurich (DE)
-# No need to change anything as both are in DE and data is the same since 1970
-
-#--------------------------------------
 # Zones linked to Europe/Belgrade
 
 # No backzone data is available for ME, so a Link is the best available data
@@ -386,6 +393,9 @@ Find Line # Liechtenstein
 Find Line Link Europe/Zurich Europe/Vaduz
 Reinstate Zone Europe/Vaduz
 Remove Link Europe/Zurich Europe/Vaduz
+
+# Europe/Busingen (DE) links to Europe/Zurich (CH)
+# No backzone data is available for Busingen, so a Link is the best available data
 
 #--------------------------------------
 # Zones linked to Europe/Belgrade
