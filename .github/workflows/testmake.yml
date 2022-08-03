@@ -1,0 +1,43 @@
+name: Test IANA make changes
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  testmake:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout tools repo
+      uses: actions/checkout@v3
+      with:
+        repository: eggert/tz
+        path: iana-tz
+    - name: Git setup
+      run: |
+        ls -la
+        cd iana-tz
+        ls -la
+        git config --global user.email "scolebourne@joda.org"
+        git config --global user.name "Stephen Colebourne"
+        git config --global advice.detachedHead false
+        git config --global init.defaultBranch "main"
+    - name: Install lzip
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y lzip
+    - name: Build
+      run: |
+        cd iana-tz
+        ls -la
+        make DATAFORM=rearguard PACKRATDATA=backzone PACKRATLIST=zone.tab tailored_tarballs
+        ls -la
+        cd tzdataunknown-tailored.tar.gz.dir
+        ls -la
+        cat etcetera
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-tar-gz
+        path: iana-tz/tzdataunknown-tailored.tar.gz
