@@ -65,6 +65,11 @@
 # Zones are sorted by zone name.  Each zone is preceded by the
 # name of the country that the zone is in, along with any other
 # commentary and rules associated with the entry.
+# If the zone overrides links in the main data, it
+# is followed by the corresponding Link lines.
+# If the zone overrides main-data links only when building with
+# PACKRATLIST=zone.tab, it is followed by a commented-out Link line
+# that starts with "#PACKRATLIST zone.tab".
 #
 # As explained in the zic man page, the zone columns are:
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]

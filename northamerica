@@ -1790,6 +1790,7 @@ Zone America/Atikokan	-6:06:28 -	LMT	1895
 			-6:00	1:00	CDT	1942 Feb  9  2:00s
 			-6:00	Canada	C%sT	1945 Sep 30  2:00
 			-5:00	-	EST
+#PACKRATLIST zone.tab Link America/Atikokan America/Coral_Harbour
 
 
 # Manitoba
