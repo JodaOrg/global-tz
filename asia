@@ -2757,10 +2757,7 @@ Zone	Asia/Beirut	2:22:00 -	LMT	1880
 Rule	NBorneo	1935	1941	-	Sep	14	0:00	0:20	-
 Rule	NBorneo	1935	1941	-	Dec	14	0:00	0	-
 #
-# peninsular Malaysia
-# taken from Mok Ly Yng (2003-10-30)
-# https://web.archive.org/web/20190822231045/http://www.math.nus.edu.sg/~mathelmr/teaching/timezone.html
-# This agrees with Singapore since 1905-06-01.
+# Peninsular Malaysia
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
 Zone Asia/Kuala_Lumpur	6:46:46 -	LMT	1901 Jan  1
 			6:55:25	-	SMT	1905 Jun  1 # Singapore M.T.
@@ -2771,6 +2768,8 @@ Zone Asia/Kuala_Lumpur	6:46:46 -	LMT	1901 Jan  1
 			9:00	-	+09	1945 Sep 12
 			7:30	-	+0730	1982 Jan  1
 			8:00	-	+08
+
+#
 # Sabah & Sarawak
 # From Paul Eggert (2014-08-12):
 # The data entries here are mostly from Shanks & Pottenger, but the 1942, 1945
