@@ -58,18 +58,24 @@ public class GlobalTzMain {
      */
     public static void main(String[] args) {
         try {
-            // set to true to run locally
-            var tool = new GlobalTzMain(false);
+            // set to true to run locally without pushing
+            var tool = new GlobalTzMain(true);
 
-            if (tool.local) {
-                var generator = new Generator(IANA_DIR, GLOBAL_DIR);
-                generator.generate();
-                generator.write();
-                System.exit(0);
-            }
+            // uncomment to perform initial local testing
+            //            if (tool.local) {
+            //                var generator = new Generator(IANA_DIR, GLOBAL_DIR);
+            //                generator.generate();
+            //                generator.write();
+            //                System.exit(0);
+            //            }
 
             System.out.println("Preparing");
             tool.gitGlobalTz("git", "checkout", "iana-tz");
+            tool.gitGlobalTz("git", "config", "--global", "user.email", "scolebourne@joda.org");
+            tool.gitGlobalTz("git", "config", "--global", "user.name", "Stephen Colebourne");
+            tool.gitIanaTz("git", "config", "--global", "user.email", "scolebourne@joda.org");
+            tool.gitIanaTz("git", "config", "--global", "user.name", "Stephen Colebourne");
+
             var lastMessage = tool.gitLastMessage(GLOBAL_DIR);
             int resetPos = lastMessage.indexOf("Reset to iana-tz ");
             if (resetPos < 0) {
@@ -85,6 +91,7 @@ public class GlobalTzMain {
                 id = tool.gitRevParse(IANA_DIR);
             }
             System.out.println("Processing " + idsToProcess.size() + " IANA commits");
+            var lastId = "";
             for (var idToProcess : idsToProcess) {
                 System.out.println("Process: " + idToProcess);
 
@@ -125,10 +132,11 @@ public class GlobalTzMain {
                 tool.gitPush();
                 tool.gitGlobalTz("git", "checkout", "global-tz");
                 tool.gitPush();
+                lastId = idToProcess;
+                break;
             }
-            if (idsToProcess.size() > 0) {
+            if (!lastId.isEmpty()) {
                 System.out.println("Updating READNE");
-                var lastId = idsToProcess.get(idsToProcess.size() - 1);
                 var now = Instant.now();
                 tool.gitGlobalTz("git", "checkout", "main");
                 var readmePath = GLOBAL_DIR.resolve("README.md");
@@ -343,7 +351,13 @@ public class GlobalTzMain {
                     currentFile.addLine(actionLine.substring(9));
 
                 } else if (actionLine.startsWith("Find Line ")) {
-                    currentFile.setInsertPoint(actionLine.substring(10));
+                    currentFile.setInsertPoint(actionLine.substring(10), 1);
+
+                } else if (actionLine.startsWith("Find Line2 ")) {
+                    currentFile.setInsertPoint(actionLine.substring(11), 2);
+
+                } else if (actionLine.startsWith("Find Line3 ")) {
+                    currentFile.setInsertPoint(actionLine.substring(11), 3);
 
                 } else if (actionLine.startsWith("Reinstate Rule ")) {
                     currentFile.resinstateRule(actionLine.substring(15));
@@ -437,11 +451,15 @@ public class GlobalTzMain {
             }
 
             // finds the line starting with the search string
-            private void setInsertPoint(String search) {
+            private void setInsertPoint(String search, int index) {
+                int count = 0;
                 for (int i = 0; i < lines.size(); i++) {
                     if (lines.get(i).startsWith(search)) {
-                        insertIndex = i + 1;
-                        return;
+                        count++;
+                        if (count == index) {
+                            insertIndex = i + 1;
+                            return;
+                        }
                     }
                 }
                 throw new IllegalStateException("Find Line failed to find '" + search + "'");
@@ -454,7 +472,7 @@ public class GlobalTzMain {
                 linesToCopy.clear();
             }
 
-            // reinstates the rule from backzone
+            // reinstates the zone from backzone
             private void resinstateZone(String searchName) {
                 var linesToCopy = backzone.findLines(ZONE, searchName);
                 insertLines(ZONE, "# Zone\tNAME\t\tSTDOFF\tRULES\tFORMAT\t[UNTIL]", linesToCopy);
@@ -479,6 +497,7 @@ public class GlobalTzMain {
             private void reinstateLink(String linkPair) {
                 var splitPos = linkPair.indexOf(' ');
                 var newId = linkPair.substring(0, splitPos);
+                newId = newId.equals("Europe/Oslo") ? newId + "\t" : newId;
                 var oldId = linkPair.substring(splitPos + 1);
                 for (int i = 0; i < lines.size(); i++) {
                     var line = lines.get(i);

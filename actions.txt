@@ -75,6 +75,9 @@ Find Line # St Helena
 Reinstate Zone Atlantic/St_Helena
 Remove Link Africa/Abidjan Atlantic/St_Helena
 
+# Ensure IS has own primary data, not a link to a different ISO-3166-1 code
+Remove Link Africa/Abidjan Atlantic/Reykjavik
+
 #--------------------------------------
 # Zones linked to Africa/Johannesburg
 Remove Lines # See Africa/Johannesburg
@@ -246,10 +249,15 @@ Add Line # Syowa (also known as Showa), -690022+0393524, since 1957
 Reinstate Zone Antarctica/Syowa
 Remove Lines # See Asia/Riyadh
 
+Find Line # Vostok
+Remove Lines # See Asia/Urumqi
+Reinstate Zone Antarctica/Vostok
+
 #--------------------------------------
 # Tidy links elsewhere
 Edit asia
 Remove Link Asia/Riyadh Antarctica/Syowa
+Remove Link Asia/Urumqi Antarctica/Vostok
 
 Edit australasia
 Remove Link Pacific/Port_Moresby Antarctica/DumontDUrville
@@ -257,7 +265,6 @@ Remove Link Pacific/Port_Moresby Antarctica/DumontDUrville
 # McMurdo references NZ rules so must be in australasia file
 Remove Link Pacific/Auckland Antarctica/McMurdo
 Reinstate Zone Antarctica/McMurdo
-
 
 Edit backward
 Reinstate Link Antarctica/McMurdo Antarctica/South_Pole
@@ -278,6 +285,24 @@ Remove Link Asia/Bangkok Asia/Phnom_Penh
 Find Line # Laos
 Reinstate Zone Asia/Vientiane
 Remove Link Asia/Bangkok Asia/Vientiane
+
+#--------------------------------------
+# Zones linked to Asia/Kuala_Lumpur
+Remove Lines # See Asia/Kuala_Lumpur
+
+Find Line # For peninsular Malaysia
+Replace Line # Peninsular Malaysia
+Reinstate Zone Asia/Kuala_Lumpur
+Remove Link Asia/Singapore Asia/Kuala_Lumpur
+
+#--------------------------------------
+# Zones linked to Asia/Kuching
+Remove Lines # See Asia/Kuching
+
+# Ensure BN has own primary data, not a link to a different ISO-3166-1 code
+Find Line # Brunei
+Reinstate Zone Asia/Brunei
+Remove Link Asia/Kuching Asia/Brunei
 
 #--------------------------------------
 # Zones linked to Asia/Dubai
@@ -345,6 +370,44 @@ Find Line # Montenegro
 Add Link Europe/Belgrade Europe/Podgorica
 
 #--------------------------------------
+# Zones linked to Europe/Berlin
+Remove Lines # See Europe/Berlin
+
+# Ensure DK has own data, not a link to a different ISO-3166-1 code
+Remove Lines # For Denmark see Europe/Berlin
+Find Line # Denmark, Faroe Islands, and Greenland
+Reinstate Rule Denmark
+Reinstate Zone Europe/Copenhagen
+Remove Link Europe/Berlin Europe/Copenhagen
+
+# Ensure NO has own data, not a link to a different ISO-3166-1 code
+Find Line # Norway
+Reinstate Rule Norway
+Reinstate Zone Europe/Oslo
+Remove Link Europe/Berlin Europe/Oslo
+
+# No backzone data is available for SJ, so a Link is the best available data
+Remove Link Europe/Berlin Arctic/Longyearbyen
+Find Line # Svalbard & Jan Mayen
+Add Link Europe/Oslo Arctic/Longyearbyen
+
+#--------------------------------------
+# Zones linked to Europe/Brussels
+Remove Lines # See Europe/Brussels
+
+# Ensure NL has own data, not a link to a different ISO-3166-1 code
+Find Line # Netherlands
+Reinstate Rule Neth
+Reinstate Zone Europe/Amsterdam
+Remove Link Europe/Brussels Europe/Amsterdam
+
+# Ensure LU has own data, not a link to a different ISO-3166-1 code
+Find Line2 # Luxembourg
+Reinstate Rule Lux
+Reinstate Zone Europe/Luxembourg
+Remove Link Europe/Brussels Europe/Luxembourg
+
+#--------------------------------------
 # Zones linked to Europe/Helsinki
 
 # No backzone data is available for AX, so a Link is the best available data
@@ -368,6 +431,15 @@ Remove Lines # Use Europe/London for Jersey, Guernsey, and the Isle of Man.
 
 # No backzone data is available for SJ, so a Link is the best available data
 Ensure Link Europe/Oslo Arctic/Longyearbyen
+
+#--------------------------------------
+# Zones linked to Europe/Paris
+Remove Lines # See Europe/Paris
+
+# Ensure MC has own data, not a link to a different ISO-3166-1 code
+Find Line # Monaco
+Reinstate Zone Europe/Monaco
+Remove Link Europe/Paris Europe/Monaco
 
 #--------------------------------------
 # Zones linked to Europe/Prague
@@ -422,10 +494,27 @@ Reinstate Zone Europe/Zagreb
 Remove Link Europe/Belgrade Europe/Zagreb
 
 #--------------------------------------
+# Zones linked to Africa/Abidjan
+Find Line # Iceland
+Reinstate Rule Iceland
+Reinstate Zone Atlantic/Reykjavik
+Remove Lines # See Africa/Abidjan
+
+#--------------------------------------
 # At present, Kosovo does not have an ISO-3166-1 code. As such, it is excluded from global-tz.
 # If Kosovo gains an ISO-3166-1 code, then an identifier will be added here.
 Find Line # Kosovo
 Add Line # See Europe/Belgrade.
+
+#--------------------------------------
+# Tidy links elsewhere
+Edit backward
+Reinstate Link Europe/Oslo Atlantic/Jan_Mayen
+Reinstate Link Atlantic/Reykjavik Iceland
+
+Edit backzone
+Remove Link Europe/Oslo Arctic/Longyearbyen
+Remove Link Atlantic/Reykjavik Iceland
 
 #==========================================================
 Edit northamerica
