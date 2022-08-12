@@ -1,12 +1,12 @@
 name: Global release
 
 # Push the actual tag to the global-tz branch
-# Then push the tag suffixed by -release to the main branch
+# Then push the tag suffixed by -prerelease to the main branch
 
 on:
   push:
     tags:
-      - '20*-release'
+      - '20*-prerelease'
 
 jobs:
   release:
@@ -25,8 +25,10 @@ jobs:
     - name: Find version
       run: |
         MAIN_VERSION=${GITHUB_REF/refs\/tags\//}
-        ACTUAL_VERSION=${MAIN_VERSION%-release}
+        ACTUAL_VERSION=${MAIN_VERSION%-prerelease}
         echo "TAG_VERSION=${ACTUAL_VERSION}" >> $GITHUB_ENV
+        echo "MAIN_VERSION=${MAIN_VERSION}"
+        echo "ACTUAL_VERSION=${ACTUAL_VERSION}"
     - name: Install lzip
       run: |
         sudo apt-get update -y
@@ -46,19 +48,5 @@ jobs:
         sha512sum tzdb-${{ env.TAG_VERSION }}.tar.lz > tzdb-${{ env.TAG_VERSION }}.tar.lz.sha512
         sha512sum tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz > tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz.sha512
         ls -la
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      with:
-        body: Release ${{ env.TAG_VERSION }} of global-tz, derived from iana-tz
-        tag_name: ${{ env.TAG_VERSION }}
-        files: |
-          tzcode${{ env.TAG_VERSION }}.tar.gz
-          tzcode${{ env.TAG_VERSION }}.tar.gz.sha512
-          tzdata${{ env.TAG_VERSION }}.tar.gz
-          tzdata${{ env.TAG_VERSION }}.tar.gz.sha512
-          tzdb-${{ env.TAG_VERSION }}.tar.lz
-          tzdb-${{ env.TAG_VERSION }}.tar.lz.sha512
-          tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz
-          tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz.sha512
 
 # ZONETABLES is set to remove zone1970.tab, as the Makefile validation doesn't cover our use case
