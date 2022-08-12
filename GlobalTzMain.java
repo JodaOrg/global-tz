@@ -59,7 +59,7 @@ public class GlobalTzMain {
     public static void main(String[] args) {
         try {
             // set to true to run locally without pushing
-            var tool = new GlobalTzMain(true);
+            var tool = new GlobalTzMain(false);
 
             // uncomment to perform initial local testing
             //            if (tool.local) {
@@ -133,7 +133,6 @@ public class GlobalTzMain {
                 tool.gitGlobalTz("git", "checkout", "global-tz");
                 tool.gitPush();
                 lastId = idToProcess;
-                break;
             }
             if (!lastId.isEmpty()) {
                 System.out.println("Updating READNE");
@@ -192,7 +191,11 @@ public class GlobalTzMain {
         }
         System.out.println("Generate README");
         var readmePath = IANA_DIR.resolve("README");
-        var readmeLines = new ArrayList<String>(Files.readAllLines(readmePath));
+        var readmeLines = (List<String>) new ArrayList<String>(Files.readAllLines(readmePath));
+        var first = readmeLines.indexOf("README for the tz distribution");
+        if (first >= 0) {
+            readmeLines = readmeLines.subList(first, readmeLines.size());
+        }
         readmeLines.addAll(0, README_HEADER);
         Files.write(readmePath, readmeLines, WRITE, TRUNCATE_EXISTING);
     }
@@ -498,6 +501,8 @@ public class GlobalTzMain {
                 var splitPos = linkPair.indexOf(' ');
                 var newId = linkPair.substring(0, splitPos);
                 newId = newId.equals("Europe/Oslo") ? newId + "\t" : newId;
+                newId = newId.equals("Pacific/Pohnpei") ? newId + "\t" : newId;
+                newId = newId.equals("Pacific/Chuuk") ? newId + "\t" : newId;
                 var oldId = linkPair.substring(splitPos + 1);
                 for (int i = 0; i < lines.size(); i++) {
                     var line = lines.get(i);

@@ -228,7 +228,23 @@ Reinstate Zone Indian/Mayotte
 Remove Link Africa/Nairobi Indian/Mayotte
 
 #--------------------------------------
+# Zones linked to Asia/Dubai
+Remove Lines # See Asia/Dubai
+
+# Ensure RE has own primary data, not a link to a different ISO-3166-1 code
+Find Line # Réunion
+Reinstate Zone Indian/Reunion
+
+# Ensure SC has own primary data, not a link to a different ISO-3166-1 code
+Find Line # Seychelles
+Reinstate Zone Indian/Mahe
+
+#--------------------------------------
 # Tidy links elsewhere
+Edit asia
+Remove Link Asia/Dubai Indian/Reunion
+Remove Link Asia/Dubai Indian/Mahe
+
 Edit backward
 Reinstate Link Africa/Asmara Africa/Asmera
 Reinstate Link Africa/Bamako Africa/Timbuktu
@@ -253,11 +269,16 @@ Find Line # Vostok
 Remove Lines # See Asia/Urumqi
 Reinstate Zone Antarctica/Vostok
 
+Find Line # Kerguelen
+Replace Line # Kerguelen
+Reinstate Zone Indian/Kerguelen
+
 #--------------------------------------
 # Tidy links elsewhere
 Edit asia
 Remove Link Asia/Riyadh Antarctica/Syowa
 Remove Link Asia/Urumqi Antarctica/Vostok
+Remove Link Indian/Maldives Indian/Kerguelen
 
 Edit australasia
 Remove Link Pacific/Port_Moresby Antarctica/DumontDUrville
@@ -357,6 +378,74 @@ Find Line # Midway
 Reinstate Zone Pacific/Midway
 Remove Link Pacific/Pago_Pago Pacific/Midway
 
+#--------------------------------------
+# Zones linked to Asia/Bangkok
+Remove Lines # See Asia/Bangkok
+
+# Ensure CX has own primary data, not a link to a different ISO-3166-1 code
+Find Line # Christmas
+Reinstate Zone Indian/Christmas
+
+#--------------------------------------
+# Zones linked to Asia/Yangon
+Remove Lines # See Asia/Yangon
+
+# Ensure CC has own primary data, not a link to a different ISO-3166-1 code
+Find Line # Cocos
+Reinstate Zone Indian/Cocos
+
+#--------------------------------------
+# Zones linked to Pacific/Tarawa
+Remove Lines # See Pacific/Tarawa
+
+# Ensure MH has own primary data, not a link to a different ISO-3166-1 code
+Find Line # Marshall Is
+Reinstate Zone Pacific/Majuro
+Remove Link Pacific/Tarawa Pacific/Majuro
+
+# Ensure MH has own primary data, not a link to a different ISO-3166-1 code
+Find Line # Wake
+Reinstate Zone Pacific/Wake
+Remove Link Pacific/Tarawa Pacific/Wake
+
+# Ensure TV has own primary data, not a link to a different ISO-3166-1 code
+Find Line # Tuvalu
+Reinstate Zone Pacific/Funafuti
+Remove Link Pacific/Tarawa Pacific/Funafuti
+
+# Ensure WF has own primary data, not a link to a different ISO-3166-1 code
+Find Line # Wallis
+Reinstate Zone Pacific/Wallis
+Remove Link Pacific/Tarawa Pacific/Wallis
+
+#--------------------------------------
+# Reinstate Micronesia
+Find Line # Micronesia
+Reinstate Zone Pacific/Chuuk
+Reinstate Zone Pacific/Pohnpei
+
+Remove Lines # For Chuuk and Yap see Pacific/Port_Moresby.
+Remove Link Pacific/Port_Moresby Pacific/Chuuk
+
+Remove Lines # For Pohnpei see Pacific/Guadalcanal.
+Remove Link Pacific/Guadalcanal Pacific/Pohnpei
+
+#--------------------------------------
+# Tidy links elsewhere
+Edit asia
+Remove Link Asia/Bangkok Indian/Christmas
+Remove Link Asia/Yangon Indian/Cocos
+
+Edit backward
+Reinstate Link Pacific/Pohnpei Pacific/Ponape
+Reinstate Link Pacific/Chuuk Pacific/Truk
+Reinstate Link Pacific/Chuuk Pacific/Yap
+
+Edit backzone
+Remove Link Pacific/Chuuk Pacific/Truk
+Remove Link Pacific/Chuuk Pacific/Yap
+Remove Link Pacific/Pohnpei Pacific/Ponape
+
 #==========================================================
 Edit europe
 
@@ -390,6 +479,11 @@ Remove Link Europe/Berlin Europe/Oslo
 Remove Link Europe/Berlin Arctic/Longyearbyen
 Find Line # Svalbard & Jan Mayen
 Add Link Europe/Oslo Arctic/Longyearbyen
+
+# Ensure SE has own data, not a link to a different ISO-3166-1 code
+Find Line # Sweden
+Reinstate Zone Europe/Stockholm
+Remove Link Europe/Berlin Europe/Stockholm
 
 #--------------------------------------
 # Zones linked to Europe/Brussels
@@ -443,9 +537,13 @@ Remove Link Europe/Paris Europe/Monaco
 
 #--------------------------------------
 # Zones linked to Europe/Prague
+Remove Lines # See Europe/Prague
+Remove Lines # Use Europe/Prague also for Slovakia.
 
 # No backzone data is available for SK, so a Link is the best available data
-Ensure Link Europe/Prague Europe/Bratislava
+Remove Link Europe/Prague Europe/Bratislava
+Find Line # Slovakia
+Add Link Europe/Prague Europe/Bratislava
 
 #--------------------------------------
 # Zones linked to Europe/Rome
@@ -461,10 +559,9 @@ Ensure Link Europe/Rome Europe/Vatican
 Remove Lines # See Europe/Zurich
 
 # Ensure LI has own data, not a link to a different ISO-3166-1 code
-Find Line # Liechtenstein
-Find Line Link Europe/Zurich Europe/Vaduz
-Reinstate Zone Europe/Vaduz
 Remove Link Europe/Zurich Europe/Vaduz
+Find Line # Liechtenstein
+Reinstate Zone Europe/Vaduz
 
 # Europe/Busingen (DE) links to Europe/Zurich (CH)
 # No backzone data is available for Busingen, so a Link is the best available data
