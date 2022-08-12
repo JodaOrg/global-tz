@@ -157,9 +157,11 @@ Zone Antarctica/Mawson	0	-	-00	1954 Feb 13
 # St Paul Island - near Amsterdam, uninhabited
 #	fishing stations operated variously 1819/1931
 #
+# Kerguelen
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
 Zone Indian/Kerguelen	0	-	-00	1950 # Port-aux-Français
 			5:00	-	+05
+
 #
 # year-round base in the main continent
 # Dumont d'Urville, Île des Pétrels, -6640+14001, since 1956-11
