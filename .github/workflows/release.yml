@@ -5,6 +5,8 @@ name: Global release
 
 on:
   push:
+    branches:
+      - '20*-release'
     tags:
       - '20*-release'
 
@@ -24,8 +26,9 @@ jobs:
         ref: 'global-tz'
     - name: Find version
       run: |
-        MAIN_VERSION=${GITHUB_REF/refs\/tags\//}
-        ACTUAL_VERSION=${MAIN_VERSION%-release}
+        MAIN_VERSION1=${GITHUB_REF/#refs\/tags\//}
+        MAIN_VERSION=${MAIN_VERSION1/#refs\/heads\//}
+        ACTUAL_VERSION=${MAIN_VERSION%-prerelease}
         echo "TAG_VERSION=${ACTUAL_VERSION}" >> $GITHUB_ENV
         echo "MAIN_VERSION=${MAIN_VERSION}"
         echo "ACTUAL_VERSION=${ACTUAL_VERSION}"
@@ -39,16 +42,10 @@ jobs:
         git checkout global-tz
         git fetch --all --tags --prune
         git tag --list
-        git checkout tags/${{ env.TAG_VERSION }}
+        git reset --hard ${{ env.TAG_VERSION }}
         ls -la
         make check VERSION="${{ env.TAG_VERSION }}" ZONETABLES="zone.tab"
         make tarballs VERSION="${{ env.TAG_VERSION }}"
-        ls -la
-        mv tzcode*.tar.gz tzcode${{ env.TAG_VERSION }}.tar.gz
-        mv tzdata*-rearguard.tar.gz xtzdata${{ env.TAG_VERSION }}-rearguard.tar.gz
-        mv tzdata*.tar.gz tzdata${{ env.TAG_VERSION }}.tar.gz
-        mv xtzdata${{ env.TAG_VERSION }}-rearguard.tar.gz tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz
-        mv tzdb-*.tar.lz tzdb-${{ env.TAG_VERSION }}.tar.lz
         ls -la
         sha512sum tzcode${{ env.TAG_VERSION }}.tar.gz > tzcode${{ env.TAG_VERSION }}.tar.gz.sha512
         sha512sum tzdata${{ env.TAG_VERSION }}.tar.gz > tzdata${{ env.TAG_VERSION }}.tar.gz.sha512
@@ -70,4 +67,5 @@ jobs:
           tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz
           tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz.sha512
 
+# Use git rest --hard to ensure the state is what make expects, if this is not done the version file is incorrect in the output
 # ZONETABLES is set to remove zone1970.tab, as the Makefile validation doesn't cover our use case

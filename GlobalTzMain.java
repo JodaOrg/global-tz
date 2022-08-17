@@ -190,7 +190,7 @@ public class GlobalTzMain {
                     });
         }
         System.out.println("Generate README");
-        var readmePath = IANA_DIR.resolve("README");
+        var readmePath = GLOBAL_DIR.resolve("README");
         var readmeLines = (List<String>) new ArrayList<String>(Files.readAllLines(readmePath));
         var first = readmeLines.indexOf("README for the tz distribution");
         if (first >= 0) {
