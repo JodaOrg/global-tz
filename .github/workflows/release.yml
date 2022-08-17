@@ -28,7 +28,7 @@ jobs:
       run: |
         MAIN_VERSION1=${GITHUB_REF/#refs\/tags\//}
         MAIN_VERSION=${MAIN_VERSION1/#refs\/heads\//}
-        ACTUAL_VERSION=${MAIN_VERSION%-prerelease}
+        ACTUAL_VERSION=${MAIN_VERSION%-release}
         echo "TAG_VERSION=${ACTUAL_VERSION}" >> $GITHUB_ENV
         echo "MAIN_VERSION=${MAIN_VERSION}"
         echo "ACTUAL_VERSION=${ACTUAL_VERSION}"
