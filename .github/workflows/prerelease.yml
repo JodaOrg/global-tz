@@ -1,10 +1,12 @@
-name: Global release
+name: Global prerelease
 
 # Push the actual tag to the global-tz branch (not the iana-tz branch!)
 # Then push the tag suffixed by -prerelease to the main branch
 
 on:
   push:
+    branches:
+      - '20*-prerelease'
     tags:
       - '20*-prerelease'
 
@@ -24,7 +26,8 @@ jobs:
         ref: 'global-tz'
     - name: Find version
       run: |
-        MAIN_VERSION=${GITHUB_REF/refs\/tags\//}
+        MAIN_VERSION1=${GITHUB_REF/#refs\/tags\//}
+        MAIN_VERSION=${MAIN_VERSION1/#refs\/heads\//}
         ACTUAL_VERSION=${MAIN_VERSION%-prerelease}
         echo "TAG_VERSION=${ACTUAL_VERSION}" >> $GITHUB_ENV
         echo "MAIN_VERSION=${MAIN_VERSION}"
@@ -39,21 +42,22 @@ jobs:
         git checkout global-tz
         git fetch --all --tags --prune
         git tag --list
-        git checkout tags/${{ env.TAG_VERSION }}
+        git reset --hard ${{ env.TAG_VERSION }}
         ls -la
         make check VERSION="${{ env.TAG_VERSION }}" ZONETABLES="zone.tab"
         make tarballs VERSION="${{ env.TAG_VERSION }}"
-        ls -la
-        mv tzcode*.tar.gz tzcode${{ env.TAG_VERSION }}.tar.gz
-        mv tzdata*-rearguard.tar.gz xtzdata${{ env.TAG_VERSION }}-rearguard.tar.gz
-        mv tzdata*.tar.gz tzdata${{ env.TAG_VERSION }}.tar.gz
-        mv xtzdata${{ env.TAG_VERSION }}-rearguard.tar.gz tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz
-        mv tzdb-*.tar.lz tzdb-${{ env.TAG_VERSION }}.tar.lz
         ls -la
         sha512sum tzcode${{ env.TAG_VERSION }}.tar.gz > tzcode${{ env.TAG_VERSION }}.tar.gz.sha512
         sha512sum tzdata${{ env.TAG_VERSION }}.tar.gz > tzdata${{ env.TAG_VERSION }}.tar.gz.sha512
         sha512sum tzdb-${{ env.TAG_VERSION }}.tar.lz > tzdb-${{ env.TAG_VERSION }}.tar.lz.sha512
         sha512sum tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz > tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz.sha512
         ls -la
+    - name: Publish artifacs to inspect manually
+      uses: actions/upload-artifact@v3
+      with:
+        name: Output global-tz files
+        retention-days: 5
+        path: tz*${{ env.TAG_VERSION }}*.tar.*
 
+# Use git rest --hard to ensure the state is what make expects, if this is not done the version file is incorrect in the output
 # ZONETABLES is set to remove zone1970.tab, as the Makefile validation doesn't cover our use case
