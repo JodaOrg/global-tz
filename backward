@@ -101,7 +101,7 @@ Link	America/Mazatlan	Mexico/BajaSur
 Link	America/Mexico_City	Mexico/General
 Link	Pacific/Auckland	NZ
 Link	Pacific/Chatham		NZ-CHAT
-Link	America/Denver	Navajo	#= America/Shiprock
+Link	America/Denver		Navajo	#= America/Shiprock
 Link	Asia/Shanghai		PRC
 Link	Europe/Warsaw		Poland
 Link	Europe/Lisbon		Portugal
@@ -190,7 +190,7 @@ Link	Africa/Asmara	Africa/Asmera
 Link	America/Nuuk		America/Godthab
 Link	Asia/Ashgabat		Asia/Ashkhabad
 Link	Asia/Kolkata		Asia/Calcutta
-Link	Asia/Shanghai	Asia/Chungking	#= Asia/Chongqing
+Link	Asia/Shanghai		Asia/Chungking	#= Asia/Chongqing
 Link	Asia/Dhaka		Asia/Dacca
 # Istanbul is in both continents.
 Link	Europe/Istanbul		Asia/Istanbul
