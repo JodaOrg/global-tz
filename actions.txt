@@ -4,11 +4,17 @@
 # There is one section for each file to be edited.
 # The commands are:
 # - "Edit <fileName>" - edit the file <fileName>
+# - "Remove Exact Line <textToMatch>" - remove first line that exactly matches <textToMatch>
+# - "Remove Line <textToMatch>" - remove first line that starts with <textToMatch>
 # - "Remove Lines <textToMatch>" - remove all lines that start with <textToMatch>
+# - "Remove Next Line" - removes the next line
 # - "Replace Line <newLine>" - replace the current line with <newLine>
 # - "Insert Line <newLine>" - insert <newLine> before the current line
+# - "Insert Section <header>" - insert a section before the current line
 # - "Add Line <newLine>" - add <newLine> after the current line
+# - "Find Exact Line <textToMatch>" - finds the first line that exactly matches <textToMatch>
 # - "Find Line <textToMatch>" - finds the first line that starts with <textToMatch>
+# - "Find Next Line" - finds the next line
 # - "Reinstate Rule <name>" - finds the rule <name> in backzone and copies the data
 # - "Reinstate Zone <name>" - finds the zone <name> in backzone and copies the data
 # - "Reinstate Link <linkPair>" - finds the link to the second part of <linkPair> and change the target
@@ -20,379 +26,536 @@
 Edit africa
 
 #--------------------------------------
+# Fix file layout
+
+Remove Exact Line # Burkina Faso
+Remove Exact Line # The Gambia
+Remove Exact Line # Ghana
+Remove Exact Line # Guinea
+Remove Exact Line # Iceland
+Remove Exact Line # Mali
+Remove Exact Line # Mauritania
+Remove Exact Line # St Helena
+Remove Exact Line # Senegal
+Remove Exact Line # Sierra Leone
+Remove Exact Line # Togo
+
+Remove Exact Line # Comoros
+Remove Exact Line # Djibouti
+Remove Exact Line # Eritrea
+Remove Exact Line # Ethiopia
+Remove Exact Line # Madagascar
+Remove Exact Line # Mayotte
+Remove Exact Line # Somalia
+Remove Exact Line # Tanzania
+Remove Exact Line # Uganda
+
+Remove Exact Line # Botswana
+Remove Exact Line # Burundi
+Remove Exact Line # Democratic Republic of the Congo (eastern)
+Remove Exact Line # Malawi
+Remove Exact Line # Rwanda
+Remove Exact Line # Zambia
+Remove Exact Line # Zimbabwe
+
+Remove Exact Line # Angola
+Remove Exact Line # Benin
+Remove Exact Line # Cameroon
+Remove Exact Line # Central African Republic
+Remove Exact Line # Democratic Republic of the Congo (western)
+Remove Exact Line # Republic of the Congo
+Remove Exact Line # Equatorial Guinea
+Remove Exact Line # Gabon
+Remove Exact Line # Niger
+
+Remove Exact Line # Eswatini (Swaziland)
+Remove Exact Line # Lesotho
+
+Find Exact Line # Cape Verde / Cabo Verde
+Insert Section # Cameroon
+Insert Section # Burundi
+Insert Section # Burkina Faso
+Insert Section # Botswana
+Insert Section # Benin
+Insert Section # Angola
+
+Find Exact Line # Chad
+Insert Section # Central African Republic
+
+Find Exact Line # Côte d'Ivoire (Ivory Coast)
+Insert Section # Republic of the Congo
+Insert Section # Democratic Republic of the Congo
+Insert Section # Comoros
+
+Find After Zone Africa/Abidjan
+Find Next Line
+Insert Section # Djibouti
+
+Find Exact Line # Guinea-Bissau
+Insert Section # Guinea
+Insert Section # Ghana
+Insert Section # The Gambia
+Insert Section # Gabon
+Insert Section # Ethiopia
+Insert Section # Eswatini (formerly Swaziland)
+Insert Section # Eritrea
+Insert Section # Equatorial Guinea
+
+Find Exact Line # Liberia
+Insert Section # Lesotho
+
+Find Exact Line # Mauritius
+Insert Section # Mauritania
+Insert Section # Mali
+Insert Section # Malawi
+Insert Section # Madagascar
+
+Find Exact Line # From Alex Krivenyshev (2008-05-09):
+Insert Section # Morocco
+Insert Section # Mayotte
+
+Find Exact Line # Nigeria
+Insert Section # Niger
+
+Find Exact Line # São Tomé and Príncipe
+Insert Section # St Helena
+Insert Section # Rwanda
+Insert Section # Réunion
+
+Find Exact Line # South Africa
+Insert Section # Somalia
+Insert Section # Sierra Leone
+Insert Section # Seychelles
+Insert Section # Senegal
+
+Find Exact Line # Tunisia
+Insert Section # Togo
+Insert Section # Tanzania
+
+Find After Zone Africa/Tunis
+Find Next Line
+Insert Section # Zimbabwe
+Insert Section # Zambia
+Insert Section # Uganda
+
+#--------------------------------------
 # Zones linked to Africa/Abidjan
-Remove Lines # See Africa/Abidjan
 
 # Ensure GH has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Ghana
 Reinstate Rule Ghana
 Reinstate Zone Africa/Accra
-Remove Link Africa/Abidjan Africa/Accra
+Edit backward: Remove Link Africa/Abidjan Africa/Accra
 
 # Ensure ML has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Mali
 Reinstate Zone Africa/Bamako
-Remove Link Africa/Abidjan Africa/Bamako
+Edit backward: Remove Link Africa/Abidjan Africa/Bamako
+Edit backward: Reinstate Link Africa/Bamako Africa/Timbuktu
 
 # Ensure GM has own primary data, not a link to a different ISO-3166-1 code
 Find Line # The Gambia
 Reinstate Zone Africa/Banjul
-Remove Link Africa/Abidjan Africa/Banjul
+Edit backward: Remove Link Africa/Abidjan Africa/Banjul
 
 # Ensure GN has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Guinea
 Reinstate Zone Africa/Conakry
-Remove Link Africa/Abidjan Africa/Conakry
+Edit backward: Remove Link Africa/Abidjan Africa/Conakry
 
 # Ensure SN has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Senegal
 Reinstate Zone Africa/Dakar
-Remove Link Africa/Abidjan Africa/Dakar
+Edit backward: Remove Link Africa/Abidjan Africa/Dakar
 
 # Ensure SL has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Sierra Leone
 Reinstate Rule SL
 Reinstate Zone Africa/Freetown
-Remove Link Africa/Abidjan Africa/Freetown
+Edit backward: Remove Link Africa/Abidjan Africa/Freetown
 
 # Ensure TG has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Togo
 Reinstate Zone Africa/Lome
-Remove Link Africa/Abidjan Africa/Lome
+Edit backward: Remove Link Africa/Abidjan Africa/Lome
 
 # Ensure MR has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Mauritania
 Reinstate Zone Africa/Nouakchott
-Remove Link Africa/Abidjan Africa/Nouakchott
+Edit backward: Remove Link Africa/Abidjan Africa/Nouakchott
 
 # Ensure BF has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Burkina Faso
 Reinstate Zone Africa/Ouagadougou
-Remove Link Africa/Abidjan Africa/Ouagadougou
+Edit backward: Remove Link Africa/Abidjan Africa/Ouagadougou
 
 # Ensure SH has own primary data, not a link to a different ISO-3166-1 code
 Find Line # St Helena
 Reinstate Zone Atlantic/St_Helena
-Remove Link Africa/Abidjan Atlantic/St_Helena
-
-# Ensure IS has own primary data, not a link to a different ISO-3166-1 code
-Remove Link Africa/Abidjan Atlantic/Reykjavik
+Edit backward: Remove Link Africa/Abidjan Atlantic/St_Helena
 
 #--------------------------------------
 # Zones linked to Africa/Johannesburg
-Remove Lines # See Africa/Johannesburg
+Find Line # South Africa
+Remove Next Line
 
 # Ensure LS has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Lesotho
 Reinstate Zone Africa/Maseru
-Remove Link Africa/Johannesburg Africa/Maseru
+Edit backward: Remove Link Africa/Johannesburg Africa/Maseru
 
 # Ensure SZ has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Eswatini
 Reinstate Zone Africa/Mbabane
-Remove Link Africa/Johannesburg Africa/Mbabane
+Edit backward: Remove Link Africa/Johannesburg Africa/Mbabane
 
 #--------------------------------------
 # Zones linked to Africa/Lagos
-Remove Lines # See Africa/Lagos
 
 # Ensure CF has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Central African Republic
 Reinstate Zone Africa/Bangui
-Remove Link Africa/Lagos Africa/Bangui
+Edit backward: Remove Link Africa/Lagos Africa/Bangui
 
 # Ensure CG has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Republic of the Congo
 Reinstate Zone Africa/Brazzaville
-Remove Link Africa/Lagos Africa/Brazzaville
+Edit backward: Remove Link Africa/Lagos Africa/Brazzaville
 
 # Ensure CM has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Cameroon
 Reinstate Zone Africa/Douala
-Remove Link Africa/Lagos Africa/Douala
+Edit backward: Remove Link Africa/Lagos Africa/Douala
 
 # Ensure CD has own primary data, not links outside of CD
 Find Line # Democratic Republic of the Congo
 Reinstate Zone Africa/Kinshasa
 Reinstate Zone Africa/Lubumbashi
-Remove Link Africa/Lagos Africa/Kinshasa
-Remove Link Africa/Maputo Africa/Lubumbashi
+Edit backward: Remove Link Africa/Lagos Africa/Kinshasa
+Edit backward: Remove Link Africa/Maputo Africa/Lubumbashi
 
 # Ensure GA has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Gabon
 Reinstate Zone Africa/Libreville
-Remove Link Africa/Lagos Africa/Libreville
+Edit backward: Remove Link Africa/Lagos Africa/Libreville
 
 # Ensure AO has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Angola
 Reinstate Zone Africa/Luanda
-Remove Link Africa/Lagos Africa/Luanda
+Edit backward: Remove Link Africa/Lagos Africa/Luanda
 
 # Ensure GQ has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Equatorial Guinea
 Reinstate Zone Africa/Malabo
-Remove Link Africa/Lagos Africa/Malabo
+Edit backward: Remove Link Africa/Lagos Africa/Malabo
 
 # Ensure NE has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Niger
 Reinstate Zone Africa/Niamey
-Remove Link Africa/Lagos Africa/Niamey
+Edit backward: Remove Link Africa/Lagos Africa/Niamey
 
 # Ensure BJ has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Benin
 Reinstate Zone Africa/Porto-Novo
-Remove Link Africa/Lagos Africa/Porto-Novo
+Edit backward: Remove Link Africa/Lagos Africa/Porto-Novo
 
 #--------------------------------------
 # Zones linked to Africa/Maputo
-Remove Lines # See Africa/Maputo
 
 # Ensure MW has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Malawi
 Reinstate Zone Africa/Blantyre
-Remove Link Africa/Maputo Africa/Blantyre
+Edit backward: Remove Link Africa/Maputo Africa/Blantyre
 
 # Ensure BI has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Burundi
 Reinstate Zone Africa/Bujumbura
-Remove Link Africa/Maputo Africa/Bujumbura
+Edit backward: Remove Link Africa/Maputo Africa/Bujumbura
 
 # Ensure BW has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Botswana
 Reinstate Zone Africa/Gaborone
-Remove Link Africa/Maputo Africa/Gaborone
+Edit backward: Remove Link Africa/Maputo Africa/Gaborone
 
 # Ensure ZW has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Zimbabwe
 Reinstate Zone Africa/Harare
-Remove Link Africa/Maputo Africa/Harare
+Edit backward: Remove Link Africa/Maputo Africa/Harare
 
 # Ensure RW has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Rwanda
 Reinstate Zone Africa/Kigali
-Remove Link Africa/Maputo Africa/Kigali
+Edit backward: Remove Link Africa/Maputo Africa/Kigali
 
 # Ensure ZM has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Zambia
 Reinstate Zone Africa/Lusaka
-Remove Link Africa/Maputo Africa/Lusaka
+Edit backward: Remove Link Africa/Maputo Africa/Lusaka
 
 #--------------------------------------
 # Zones linked to Africa/Nairobi
-Remove Lines # See Africa/Nairobi
 
 # Ensure ET has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Ethiopia
-Find Line # https://www.pri.org/stories/2015-01-30/if-you-have-meeting-ethiopia-you-better-double-check-time
 Reinstate Zone Africa/Addis_Ababa
-Remove Link Africa/Nairobi Africa/Addis_Ababa
+Edit backward: Remove Link Africa/Nairobi Africa/Addis_Ababa
 
 # Ensure ER has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Eritrea
 Reinstate Zone Africa/Asmara
-Remove Link Africa/Nairobi Africa/Asmara
+Edit backward: Reinstate Link Africa/Asmara Africa/Asmera
+Edit backward: Remove Link Africa/Nairobi Africa/Asmara
 
 # Ensure TZ has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Tanzania
 Reinstate Zone Africa/Dar_es_Salaam
-Remove Link Africa/Nairobi Africa/Dar_es_Salaam
+Edit backward: Remove Link Africa/Nairobi Africa/Dar_es_Salaam
 
 # Ensure DJ has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Djibouti
 Reinstate Zone Africa/Djibouti
-Remove Link Africa/Nairobi Africa/Djibouti
+Edit backward: Remove Link Africa/Nairobi Africa/Djibouti
 
 # Ensure UG has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Uganda
 Reinstate Zone Africa/Kampala
-Remove Link Africa/Nairobi Africa/Kampala
+Edit backward: Remove Link Africa/Nairobi Africa/Kampala
 
 # Ensure SO has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Somalia
 Reinstate Zone Africa/Mogadishu
-Remove Link Africa/Nairobi Africa/Mogadishu
+Edit backward: Remove Link Africa/Nairobi Africa/Mogadishu
 
 # Ensure MG has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Madagascar
 Reinstate Zone Indian/Antananarivo
-Remove Link Africa/Nairobi Indian/Antananarivo
+Edit backward: Remove Link Africa/Nairobi Indian/Antananarivo
 
 # Ensure KM has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Comoros
 Reinstate Zone Indian/Comoro
-Remove Link Africa/Nairobi Indian/Comoro
+Edit backward: Remove Link Africa/Nairobi Indian/Comoro
 
 # Ensure YT has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Mayotte
 Reinstate Zone Indian/Mayotte
-Remove Link Africa/Nairobi Indian/Mayotte
+Edit backward: Remove Link Africa/Nairobi Indian/Mayotte
 
 #--------------------------------------
 # Zones linked to Asia/Dubai
-Remove Lines # See Asia/Dubai
 
 # Ensure RE has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Réunion
 Reinstate Zone Indian/Reunion
+Edit asia: Remove Line # Réunion
+Edit backward: Remove Link Asia/Dubai Indian/Reunion
 
 # Ensure SC has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Seychelles
 Reinstate Zone Indian/Mahe
-
-#--------------------------------------
-# Tidy links elsewhere
-Edit asia
-Remove Link Asia/Dubai Indian/Reunion
-Remove Link Asia/Dubai Indian/Mahe
-
-Edit backward
-Reinstate Link Africa/Asmara Africa/Asmera
-Reinstate Link Africa/Bamako Africa/Timbuktu
+Edit asia: Remove Line # Seychelles
+Edit backward: Remove Link Asia/Dubai Indian/Mahe
 
 #==========================================================
 Edit antarctica
 
 #--------------------------------------
 # Ensure AQ has own data, not a link to a different ISO-3166-1 code
-# Antarctica/McMurdo
+# McMurdo references NZ rules so must be in australasia file
+Edit australasia: Find After Zone Pacific/Auckland
+Edit australasia: Add Line 
+Edit australasia: Reinstate Zone Antarctica/McMurdo
+Edit backward: Reinstate Link Antarctica/McMurdo Antarctica/South_Pole
+Edit backward: Remove Link Pacific/Auckland Antarctica/McMurdo
 
 Find Line # Dumont d'Urville - see Pacific/Port_Moresby.
 Replace Line # Dumont d'Urville, Île des Pétrels, -6640+14001, since 1956-11
 Reinstate Zone Antarctica/DumontDUrville
+Edit backward: Remove Link Pacific/Port_Moresby Antarctica/DumontDUrville
 
 Find Line # Japan - year-round bases
 Add Line # Syowa (also known as Showa), -690022+0393524, since 1957
 Reinstate Zone Antarctica/Syowa
 Remove Lines # See Asia/Riyadh
+Edit backward: Remove Link Asia/Riyadh Antarctica/Syowa
 
 Find Line # Vostok
 Remove Lines # See Asia/Urumqi
 Reinstate Zone Antarctica/Vostok
+Edit backward: Remove Link Asia/Urumqi Antarctica/Vostok
 
 Find Line # Kerguelen
 Replace Line # Kerguelen
 Reinstate Zone Indian/Kerguelen
-
-#--------------------------------------
-# Tidy links elsewhere
-Edit asia
-Remove Link Asia/Riyadh Antarctica/Syowa
-Remove Link Asia/Urumqi Antarctica/Vostok
-Remove Link Indian/Maldives Indian/Kerguelen
-
-Edit australasia
-Remove Link Pacific/Port_Moresby Antarctica/DumontDUrville
-
-# McMurdo references NZ rules so must be in australasia file
-Remove Link Pacific/Auckland Antarctica/McMurdo
-Reinstate Zone Antarctica/McMurdo
-
-Edit backward
-Reinstate Link Antarctica/McMurdo Antarctica/South_Pole
+Edit backward: Remove Link Indian/Maldives Indian/Kerguelen
 
 #==========================================================
 Edit asia
 
 #--------------------------------------
+# Fix file layout
+
+Remove Exact Line # Brunei
+Remove Exact Line # Cocos (Keeling) Islands
+
+Remove Exact Line # Bahrain
+
+Remove Exact Line # Kuwait
+Remove Exact Line # Yemen
+
+Remove Exact Line # Cambodia
+Remove Exact Line # Christmas I
+Remove Exact Line # Laos
+Remove Exact Line # Vietnam (northern)
+
+Remove Exact Line # Oman
+
+Find Exact Line # Bangladesh
+Insert Section # Bahrain
+
+Find Exact Line # Myanmar (Burma)
+Insert Section # Brunei
+
+Find Exact Line # China
+Insert Section # Cambodia
+
+Find Exact Line # Lebanon
+Insert Section # Laos
+Insert Section # Kuwait
+
+Find Exact Line # Pakistan
+Insert Section # Oman
+
+Find Line # For timestamps before 1970, see Asia/Hanoi in the file 'backzone'.
+Add Line 
+Add Line # Yemen
+
+#--------------------------------------
 # Zones linked to Asia/Bangkok
-Remove Lines # See Asia/Bangkok
 
 # Ensure KH has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Cambodia
 Reinstate Zone Asia/Phnom_Penh
-Remove Link Asia/Bangkok Asia/Phnom_Penh
+Edit backward: Remove Link Asia/Bangkok Asia/Phnom_Penh
 
 # Ensure LA has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Laos
 Reinstate Zone Asia/Vientiane
-Remove Link Asia/Bangkok Asia/Vientiane
+Edit backward: Remove Link Asia/Bangkok Asia/Vientiane
 
 #--------------------------------------
 # Zones linked to Asia/Kuala_Lumpur
-Remove Lines # See Asia/Kuala_Lumpur
 
 Find Line # For peninsular Malaysia
 Replace Line # Peninsular Malaysia
 Reinstate Zone Asia/Kuala_Lumpur
-Remove Link Asia/Singapore Asia/Kuala_Lumpur
+Edit backward: Remove Link Asia/Singapore Asia/Kuala_Lumpur
 
 #--------------------------------------
 # Zones linked to Asia/Kuching
-Remove Lines # See Asia/Kuching
+Find Line # Malaysia (eastern)
+Remove Next Line
 
 # Ensure BN has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Brunei
 Reinstate Zone Asia/Brunei
-Remove Link Asia/Kuching Asia/Brunei
+Edit backward: Remove Link Asia/Kuching Asia/Brunei
 
 #--------------------------------------
 # Zones linked to Asia/Dubai
-Remove Lines # See Asia/Dubai
 
 # Ensure OM has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Oman
 Reinstate Zone Asia/Muscat
-Remove Link Asia/Dubai Asia/Muscat
+Edit backward: Remove Link Asia/Dubai Asia/Muscat
 
 #--------------------------------------
 # Zones linked to Asia/Qatar
-Remove Lines # See Asia/Qatar
 
 # Ensure BH has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Bahrain
 Reinstate Zone Asia/Bahrain
-Remove Link Asia/Qatar Asia/Bahrain
+Edit backward: Remove Link Asia/Qatar Asia/Bahrain
 
 #--------------------------------------
 # Zones linked to Asia/Riyadh
-Remove Lines # See Asia/Riyadh
 
 # Ensure YE has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Yemen
 Reinstate Zone Asia/Aden
-Remove Link Asia/Riyadh Asia/Aden
+Edit backward: Remove Link Asia/Riyadh Asia/Aden
 
 # Ensure KW has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Kuwait
 Reinstate Zone Asia/Kuwait
-Remove Link Asia/Riyadh Asia/Kuwait
+Edit backward: Remove Link Asia/Riyadh Asia/Kuwait
 
 #==========================================================
 Edit australasia
 
 #--------------------------------------
+# Fix file layout
+
+Remove Exact Line # N Mariana Is
+
+Remove Exact Line # Marshall Is
+Remove Exact Line # Tuvalu
+Remove Exact Line # Wake
+Remove Exact Line # Wallis & Futuna
+
+Remove Exact Line # Midway
+
+Find Exact Line # Fiji
+Insert Section # Cocos (Keeling) Islands
+Insert Section # Christmas
+
+Find Exact Line # Marshall Is
+Insert Section # N Mariana Is
+
+Find Exact Line # US minor outlying islands
+Insert Section # Tuvalu
+
+Find Exact Line # Palmyra
+Insert Section # Midway
+
+Find Exact Line # Vanuatu
+Insert Section # Wake
+
+Find After Zone Pacific/Efate
+Find Next Line
+Insert Section # Wallis and Futuna
+
+#--------------------------------------
 # Zones linked to Pacific/Guam
-Remove Lines # See Pacific/Guam
 
 # Ensure MP has own primary data, not a link to a different ISO-3166-1 code
 Find Line # N Mariana Is
 Reinstate Zone Pacific/Saipan
-Remove Link Pacific/Guam Pacific/Saipan
+Edit backward: Remove Link Pacific/Guam Pacific/Saipan
 
 #--------------------------------------
 # Zones linked to Pacific/Pago_Pago
-Remove Lines # See Pacific/Pago_Pago
 
 # Ensure UM has own data, not a link to a different ISO-3166-1 code
 Find Line # Midway
 Reinstate Zone Pacific/Midway
-Remove Link Pacific/Pago_Pago Pacific/Midway
+Edit backward: Remove Link Pacific/Pago_Pago Pacific/Midway
 
 #--------------------------------------
 # Zones linked to Asia/Bangkok
-Remove Lines # See Asia/Bangkok
 
 # Ensure CX has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Christmas
 Reinstate Zone Indian/Christmas
+Edit backward: Remove Link Asia/Bangkok Indian/Christmas
 
 #--------------------------------------
 # Zones linked to Asia/Yangon
-Remove Lines # See Asia/Yangon
 
 # Ensure CC has own primary data, not a link to a different ISO-3166-1 code
-Find Line # Cocos
+Find Line # Cocos (Keeling) Islands
 Reinstate Zone Indian/Cocos
+Edit backward: Remove Link Asia/Yangon Indian/Cocos
 
 #--------------------------------------
 # Zones linked to Pacific/Tarawa
@@ -401,22 +564,22 @@ Remove Lines # See Pacific/Tarawa
 # Ensure MH has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Marshall Is
 Reinstate Zone Pacific/Majuro
-Remove Link Pacific/Tarawa Pacific/Majuro
+Edit backward: Remove Link Pacific/Tarawa Pacific/Majuro
 
 # Ensure MH has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Wake
 Reinstate Zone Pacific/Wake
-Remove Link Pacific/Tarawa Pacific/Wake
+Edit backward: Remove Link Pacific/Tarawa Pacific/Wake
 
 # Ensure TV has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Tuvalu
 Reinstate Zone Pacific/Funafuti
-Remove Link Pacific/Tarawa Pacific/Funafuti
+Edit backward: Remove Link Pacific/Tarawa Pacific/Funafuti
 
 # Ensure WF has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Wallis
 Reinstate Zone Pacific/Wallis
-Remove Link Pacific/Tarawa Pacific/Wallis
+Edit backward: Remove Link Pacific/Tarawa Pacific/Wallis
 
 #--------------------------------------
 # Reinstate Micronesia
@@ -425,177 +588,240 @@ Reinstate Zone Pacific/Chuuk
 Reinstate Zone Pacific/Pohnpei
 
 Remove Lines # For Chuuk and Yap see Pacific/Port_Moresby.
-Remove Link Pacific/Port_Moresby Pacific/Chuuk
+Edit backward: Remove Link Pacific/Port_Moresby Pacific/Chuuk
+
+Edit backward: Reinstate Link Pacific/Pohnpei Pacific/Ponape
+Edit backward: Reinstate Link Pacific/Chuuk Pacific/Truk
+Edit backward: Reinstate Link Pacific/Chuuk Pacific/Yap
+
+Edit backzone: Remove Link Pacific/Chuuk Pacific/Truk
+Edit backzone: Remove Link Pacific/Chuuk Pacific/Yap
+Edit backzone: Remove Link Pacific/Pohnpei Pacific/Ponape
 
 Remove Lines # For Pohnpei see Pacific/Guadalcanal.
-Remove Link Pacific/Guadalcanal Pacific/Pohnpei
-
-#--------------------------------------
-# Tidy links elsewhere
-Edit asia
-Remove Link Asia/Bangkok Indian/Christmas
-Remove Link Asia/Yangon Indian/Cocos
-
-Edit backward
-Reinstate Link Pacific/Pohnpei Pacific/Ponape
-Reinstate Link Pacific/Chuuk Pacific/Truk
-Reinstate Link Pacific/Chuuk Pacific/Yap
-
-Edit backzone
-Remove Link Pacific/Chuuk Pacific/Truk
-Remove Link Pacific/Chuuk Pacific/Yap
-Remove Link Pacific/Pohnpei Pacific/Ponape
+Edit backward: Remove Link Pacific/Guadalcanal Pacific/Pohnpei
 
 #==========================================================
 Edit europe
 
 #--------------------------------------
+# Fix file layout
+
+Remove Exact Line # Bosnia & Herzegovina
+Remove Exact Line # Croatia
+Remove Exact Line # Denmark
+Remove Exact Line # Germany (Busingen enclave)
+Remove Exact Line # Luxembourg
+Remove Exact Line # Kosovo
+Remove Exact Line # Liechtenstein
+Remove Exact Line # Monaco
+Remove Exact Line # Montenegro
+Remove Exact Line # Netherlands
+Remove Exact Line # Norway
+Remove Exact Line # North Macedonia
+Remove Exact Line # Sweden
+Remove Exact Line # San Marino
+Remove Exact Line # Slovakia
+Remove Exact Line # Slovenia
+Remove Exact Line # Svalbard & Jan Mayen
+Remove Exact Line # Vatican City
+
+Find Exact Line # Bulgaria
+Insert Section # Bosnia & Herzegovina
+
+Find Exact Line # Cyprus
+Insert Section # Croatia
+
+Find Exact Line # Faroe Is
+Insert Section # Denmark
+
+Find Exact Line # France
+Insert Section # Åland Is
+
+Find Exact Line # Italy
+Insert Section # Iceland
+
+Find Exact Line # Latvia
+Insert Section # Kosovo
+
+Find Exact Line # Lithuania
+Insert Section # Liechtenstein
+
+Find Exact Line # Malta
+Insert Section # North Macedonia
+Insert Section # Luxembourg
+
+Find Exact Line # Poland
+Insert Section # Svalbard & Jan Mayen
+Insert Section # Norway
+Insert Section # Netherlands
+Insert Section # Montenegro
+Insert Section # Monaco
+
+Find Exact Line # Serbia
+Insert Section # San Marino
+
+Find Exact Line # Spain
+Insert Section # Slovenia
+Insert Section # Slovakia
+
+Find Exact Line # Switzerland
+Insert Section # Sweden
+
+Find After Zone Europe/Kyiv
+Find Next Line
+Insert Section # Vatican City
+
+#--------------------------------------
 # Zones linked to Europe/Belgrade
 
 # No backzone data is available for ME, so a Link is the best available data
-# Move it to appropriate place in the file
-Remove Link Europe/Belgrade Europe/Podgorica
 Find Line # Montenegro
 Add Link Europe/Belgrade Europe/Podgorica
+Edit backward: Remove Link Europe/Belgrade Europe/Podgorica
 
 #--------------------------------------
 # Zones linked to Europe/Berlin
-Remove Lines # See Europe/Berlin
 
 # Ensure DK has own data, not a link to a different ISO-3166-1 code
-Remove Lines # For Denmark see Europe/Berlin
-Find Line # Denmark, Faroe Islands, and Greenland
+Find Line # Denmark
 Reinstate Rule Denmark
 Reinstate Zone Europe/Copenhagen
-Remove Link Europe/Berlin Europe/Copenhagen
+Edit backward: Remove Link Europe/Berlin Europe/Copenhagen
 
 # Ensure NO has own data, not a link to a different ISO-3166-1 code
 Find Line # Norway
 Reinstate Rule Norway
 Reinstate Zone Europe/Oslo
-Remove Link Europe/Berlin Europe/Oslo
-
-# No backzone data is available for SJ, so a Link is the best available data
-Remove Link Europe/Berlin Arctic/Longyearbyen
-Find Line # Svalbard & Jan Mayen
-Add Link Europe/Oslo Arctic/Longyearbyen
+Edit backward: Remove Link Europe/Berlin Europe/Oslo
 
 # Ensure SE has own data, not a link to a different ISO-3166-1 code
 Find Line # Sweden
 Reinstate Zone Europe/Stockholm
-Remove Link Europe/Berlin Europe/Stockholm
+Edit backward: Remove Link Europe/Berlin Europe/Stockholm
 
 #--------------------------------------
 # Zones linked to Europe/Brussels
-Remove Lines # See Europe/Brussels
 
 # Ensure NL has own data, not a link to a different ISO-3166-1 code
 Find Line # Netherlands
 Reinstate Rule Neth
 Reinstate Zone Europe/Amsterdam
-Remove Link Europe/Brussels Europe/Amsterdam
+Edit backward: Remove Link Europe/Brussels Europe/Amsterdam
 
 # Ensure LU has own data, not a link to a different ISO-3166-1 code
 Find Line2 # Luxembourg
 Reinstate Rule Lux
 Reinstate Zone Europe/Luxembourg
-Remove Link Europe/Brussels Europe/Luxembourg
+Edit backward: Remove Link Europe/Brussels Europe/Luxembourg
 
 #--------------------------------------
 # Zones linked to Europe/Helsinki
 
 # No backzone data is available for AX, so a Link is the best available data
-Ensure Link Europe/Helsinki Europe/Mariehamn
+Find Line # Åland Is
+Add Link Europe/Helsinki Europe/Mariehamn
+Edit backward: Remove Link Europe/Helsinki Europe/Mariehamn
 
 #--------------------------------------
 # Zones linked to Europe/London
-Remove Lines # See Europe/London
 
 # Ensure JE/GG/IM have own data, not a link to a different ISO-3166-1 code
-Remove Link Europe/London Europe/Jersey
+Find After Zone Europe/London
 Reinstate Zone Europe/Jersey
-Remove Link Europe/London Europe/Guernsey
+Edit backward: Remove Link Europe/London Europe/Jersey
 Reinstate Zone Europe/Guernsey
-Remove Link Europe/London Europe/Isle_of_Man
+Edit backward: Remove Link Europe/London Europe/Guernsey
 Reinstate Zone Europe/Isle_of_Man
+Edit backward: Remove Link Europe/London Europe/Isle_of_Man
 Remove Lines # Use Europe/London for Jersey, Guernsey, and the Isle of Man.
 
 #--------------------------------------
 # Zones linked to Europe/Oslo
 
 # No backzone data is available for SJ, so a Link is the best available data
-Ensure Link Europe/Oslo Arctic/Longyearbyen
+Find Line # Svalbard & Jan Mayen
+Add Link Europe/Oslo Arctic/Longyearbyen
+Edit backward: Remove Link Europe/Berlin Arctic/Longyearbyen
+Edit backward: Reinstate Link Europe/Oslo Atlantic/Jan_Mayen
+Edit backzone: Remove Link Europe/Oslo Arctic/Longyearbyen
 
 #--------------------------------------
 # Zones linked to Europe/Paris
-Remove Lines # See Europe/Paris
 
 # Ensure MC has own data, not a link to a different ISO-3166-1 code
 Find Line # Monaco
 Reinstate Zone Europe/Monaco
-Remove Link Europe/Paris Europe/Monaco
+Edit backward: Remove Link Europe/Paris Europe/Monaco
 
 #--------------------------------------
 # Zones linked to Europe/Prague
-Remove Lines # See Europe/Prague
-Remove Lines # Use Europe/Prague also for Slovakia.
 
 # No backzone data is available for SK, so a Link is the best available data
-Remove Link Europe/Prague Europe/Bratislava
 Find Line # Slovakia
 Add Link Europe/Prague Europe/Bratislava
+Edit backward: Remove Link Europe/Prague Europe/Bratislava
 
 #--------------------------------------
 # Zones linked to Europe/Rome
 
 # No backzone data is available for SM, so a Link is the best available data
-Ensure Link Europe/Rome Europe/San_Marino
+Find Line # San Marino
+Add Link Europe/Rome Europe/San_Marino
+Edit backward: Remove Link Europe/Rome Europe/San_Marino
 
 # No backzone data is available for VA, so a Link is the best available data
-Ensure Link Europe/Rome Europe/Vatican
+Find Line # Vatican City
+Add Link Europe/Rome Europe/Vatican
+Edit backward: Remove Link Europe/Rome Europe/Vatican
 
 #--------------------------------------
 # Zones linked to Europe/Zurich
-Remove Lines # See Europe/Zurich
+Find Line # Switzerland
+Remove Next Line
 
 # Ensure LI has own data, not a link to a different ISO-3166-1 code
-Remove Link Europe/Zurich Europe/Vaduz
 Find Line # Liechtenstein
 Reinstate Zone Europe/Vaduz
+Edit backward: Remove Link Europe/Zurich Europe/Vaduz
 
 # Europe/Busingen (DE) links to Europe/Zurich (CH)
 # No backzone data is available for Busingen, so a Link is the best available data
+Find After Zone Europe/Zurich
+Add Link Europe/Zurich Europe/Busingen
+Edit backward: Remove Link Europe/Zurich Europe/Busingen
 
 #--------------------------------------
 # Zones linked to Europe/Belgrade
-Remove Lines # See Europe/Belgrade
 
 # Ensure SI has own data, not a link to a different ISO-3166-1 code
 Find Line # Slovenia
 Reinstate Zone Europe/Ljubljana
-Remove Link Europe/Belgrade Europe/Ljubljana
+Edit backward: Remove Link Europe/Belgrade Europe/Ljubljana
 
 # Ensure BA has own data, not a link to a different ISO-3166-1 code
-Find Line # Bosnia and Herzegovina
+Find Line # Bosnia & Herzegovina
 Reinstate Zone Europe/Sarajevo
-Remove Link Europe/Belgrade Europe/Sarajevo
+Edit backward: Remove Link Europe/Belgrade Europe/Sarajevo
 
 # Ensure MK has own data, not a link to a different ISO-3166-1 code
 Find Line # North Macedonia
 Reinstate Zone Europe/Skopje
-Remove Link Europe/Belgrade Europe/Skopje
+Edit backward: Remove Link Europe/Belgrade Europe/Skopje
 
 # Ensure HR has own data, not a link to a different ISO-3166-1 code
 Find Line # Croatia
 Reinstate Zone Europe/Zagreb
-Remove Link Europe/Belgrade Europe/Zagreb
+Edit backward: Remove Link Europe/Belgrade Europe/Zagreb
 
 #--------------------------------------
 # Zones linked to Africa/Abidjan
 Find Line # Iceland
 Reinstate Rule Iceland
 Reinstate Zone Atlantic/Reykjavik
-Remove Lines # See Africa/Abidjan
+Edit backward: Remove Link Africa/Abidjan Atlantic/Reykjavik
+Edit backward: Reinstate Link Atlantic/Reykjavik Iceland
+Edit backzone: Remove Link Atlantic/Reykjavik Iceland
 
 #--------------------------------------
 # At present, Kosovo does not have an ISO-3166-1 code. As such, it is excluded from global-tz.
@@ -603,33 +829,81 @@ Remove Lines # See Africa/Abidjan
 Find Line # Kosovo
 Add Line # See Europe/Belgrade.
 
-#--------------------------------------
-# Tidy links elsewhere
-Edit backward
-Reinstate Link Europe/Oslo Atlantic/Jan_Mayen
-Reinstate Link Atlantic/Reykjavik Iceland
-
-Edit backzone
-Remove Link Europe/Oslo Arctic/Longyearbyen
-Remove Link Atlantic/Reykjavik Iceland
-
 #==========================================================
 Edit northamerica
 
 #--------------------------------------
+# Fix file layout
+
+Remove Exact Line # Anguilla
+Remove Exact Line # Antigua & Barbuda
+Remove Exact Line # Aruba
+Remove Exact Line # Atikokan and Coral Harbour, Canada, match Panama since 1970.
+Remove Exact Line # Caribbean Netherlands
+Remove Exact Line # Cayman Is
+Remove Exact Line # Curaçao
+Remove Exact Line # Dominica
+Remove Exact Line # Grenada
+Remove Exact Line # Guadeloupe
+Remove Exact Line # Montserrat
+Remove Exact Line # St Barthélemy
+Remove Exact Line # St Kitts-Nevis
+Remove Exact Line # Sint Maarten / St Martin
+Remove Exact Line # St Lucia
+Remove Exact Line # St Vincent & the Grenadines
+Remove Exact Line # The Bahamas match Toronto since 1970.
+Remove Exact Line # Trinidad & Tobago
+Remove Exact Line # Virgin Is (UK & US)
+
+Find Exact Line # Barbados
+Insert Section # The Bahamas
+Insert Section # Antigua & Barbuda
+Insert Section # Anguilla
+
+Find Exact Line # Costa Rica
+Insert Section # Cayman Is
+Insert Section # Caribbean Netherlands
+
+Find Exact Line # Dominican Republic
+Insert Section # Dominica
+
+Find Exact Line # Guatemala
+Insert Section # St Martin (French part)
+Insert Section # St Barthélemy
+Insert Section # Guadeloupe
+Insert Section # Grenada
+
+Find Exact Line # Nicaragua
+Insert Section # Montserrat
+
+Find Exact Line # St Pierre and Miquelon
+Insert Section # St Lucia
+Insert Section # St Kitts-Nevis
+
+Find Exact Line # Turks and Caicos
+Insert Section # Sint Maarten
+Insert Section # St Vincent & the Grenadines
+
+Find Exact Line # Local Variables:
+Insert Section # US Virgin Is
+Insert Section # British Virgin Is
+
+#--------------------------------------
 # Zones linked to America/Panama
-Remove Lines # See America/Panama
+Find Line # Panama
+Remove Next Line
 
 # Ensure CA has own data, not a link to a different ISO-3166-1 code
 Find Line # For Atikokan see America/Panama
 Reinstate Zone America/Atikokan
-Remove Link America/Panama America/Atikokan
+Edit backward: Remove Link America/Panama America/Atikokan
 Remove Lines # For Atikokan see America/Panama
+Edit backward: Reinstate Link America/Atikokan America/Coral_Harbour
 
 # Ensure KY has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Cayman Is
 Reinstate Zone America/Cayman
-Remove Link America/Panama America/Cayman
+Edit backward: Remove Link America/Panama America/Cayman
 
 #--------------------------------------
 # Zones linked to America/Phoenix
@@ -638,21 +912,23 @@ Remove Lines # See America/Phoenix
 # Ensure CA has own data, not a link to a different ISO-3166-1 code
 Find Line # For Creston see America/Phoenix
 Reinstate Zone America/Creston
-Remove Link America/Phoenix America/Creston
+Edit backward: Remove Link America/Phoenix America/Creston
 Remove Lines # For Creston see America/Phoenix
 
 #--------------------------------------
 # Zones linked to America/Puerto_Rico
+Find Line # Puerto Rico
+Remove Next Line
 
 # Ensure AI has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Anguilla
 Reinstate Zone America/Anguilla
-Remove Link America/Puerto_Rico America/Anguilla
+Edit backward: Remove Link America/Puerto_Rico America/Anguilla
 
 # Ensure AG has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Antigua
 Reinstate Zone America/Antigua
-Remove Link America/Puerto_Rico America/Antigua
+Edit backward: Remove Link America/Puerto_Rico America/Antigua
 
 # No backzone data is available for BQ, so a Link is the best available data
 Find Line # Caribbean Netherlands
@@ -665,22 +941,22 @@ Add Line # See America/Lower_Princes in southamerica.
 # Ensure CA has own data, not a link to a different ISO-3166-1 code
 Find Line # See America/Puerto_Rico for east of Natashquan
 Reinstate Zone America/Blanc-Sablon
-Remove Link America/Puerto_Rico America/Blanc-Sablon
+Edit backward: Remove Link America/Puerto_Rico America/Blanc-Sablon
 
 # Ensure DM has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Dominica
 Reinstate Zone America/Dominica
-Remove Link America/Puerto_Rico America/Dominica
+Edit backward: Remove Link America/Puerto_Rico America/Dominica
 
 # Ensure GD has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Grenada
 Reinstate Zone America/Grenada
-Remove Link America/Puerto_Rico America/Grenada
+Edit backward: Remove Link America/Puerto_Rico America/Grenada
 
 # Ensure GP has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Guadeloupe
 Reinstate Zone America/Guadeloupe
-Remove Link America/Puerto_Rico America/Guadeloupe
+Edit backward: Remove Link America/Puerto_Rico America/Guadeloupe
 
 # No backzone data is available for MF, so a Link is the best available data
 Find Line # St Martin
@@ -689,7 +965,7 @@ Add Line # See America/Marigot in southamerica.
 # Ensure MS has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Montserrat
 Reinstate Zone America/Montserrat
-Remove Link America/Puerto_Rico America/Montserrat
+Edit backward: Remove Link America/Puerto_Rico America/Montserrat
 
 # No backzone data is available for BL, so a Link is the best available data
 Find Line # St Barthélemy
@@ -698,57 +974,60 @@ Add Line # See America/St_Barthelemy in southamerica.
 # Ensure KN has own primary data, not a link to a different ISO-3166-1 code
 Find Line # St Kitts-Nevis
 Reinstate Zone America/St_Kitts
-Remove Link America/Puerto_Rico America/St_Kitts
+Edit backward: Remove Link America/Puerto_Rico America/St_Kitts
 
 # Ensure LC has own primary data, not a link to a different ISO-3166-1 code
 Find Line # St Lucia
 Reinstate Zone America/St_Lucia
-Remove Link America/Puerto_Rico America/St_Lucia
+Edit backward: Remove Link America/Puerto_Rico America/St_Lucia
 
 # Ensure VI has own primary data, not a link to a different ISO-3166-1 code
 Find Line # US Virgin Is
 Reinstate Zone America/St_Thomas
-Remove Link America/Puerto_Rico America/St_Thomas
+Edit backward: Remove Link America/Puerto_Rico America/St_Thomas
+Edit backward: Reinstate Link America/St_Thomas America/Virgin
 
 # Ensure VC has own primary data, not a link to a different ISO-3166-1 code
-Find Line # St Vincent and the Grenadines
+Find Line # St Vincent & the Grenadines
 Reinstate Zone America/St_Vincent
-Remove Link America/Puerto_Rico America/St_Vincent
+Edit backward: Remove Link America/Puerto_Rico America/St_Vincent
 
 # Ensure VG has own primary data, not a link to a different ISO-3166-1 code
 Find Line # British Virgin Is
 Reinstate Zone America/Tortola
-Remove Link America/Puerto_Rico America/Tortola
-
-# Remove lines after insertions (see Find Line for Blanc-Sablon)
-Remove Lines # See America/Puerto_Rico
+Edit backward: Remove Link America/Puerto_Rico America/Tortola
 
 #--------------------------------------
 # Zones linked to America/Toronto
-Remove Lines # See America/Toronto
 
 # Ensure BS has own primary data, not a link to a different ISO-3166-1 code
 Find Line # The Bahamas
 Reinstate Rule Bahamas
 Reinstate Zone America/Nassau
-Remove Link America/Toronto America/Nassau
-
-#--------------------------------------
-# Tidy links elsewhere
-Edit backward
-Reinstate Link America/Atikokan America/Coral_Harbour
-Reinstate Link America/St_Thomas America/Virgin
+Edit backward: Remove Link America/Toronto America/Nassau
 
 #==========================================================
 Edit southamerica
 
 #--------------------------------------
+# Fix file layout
+
+Find Exact Line # Bolivia
+Insert Section # Aruba
+
+Find Exact Line # Ecuador
+Insert Section # Curaçao
+
+Find Exact Line # Uruguay
+Insert Section # Trinidad and Tobago
+
+#--------------------------------------
 # Zones linked to America/Puerto_Rico
-Remove Lines # See America/Puerto_Rico
 
 # Ensure AW has own primary data, not a link to a different ISO-3166-1 code
 Find Line # Aruba
 Reinstate Zone America/Aruba
+Edit backward: Remove Link America/Puerto_Rico America/Aruba
 
 # Ensure CW has own primary data, not a link to a different ISO-3166-1 code
 # No backzone data is available for BQ, so a Link is the best available data
@@ -757,6 +1036,11 @@ Find Line # Curaçao
 Reinstate Zone America/Curacao
 Add Link America/Curacao America/Kralendijk
 Add Link America/Curacao America/Lower_Princes
+Edit backward: Remove Link America/Puerto_Rico America/Curacao
+Edit backward: Remove Link America/Puerto_Rico America/Kralendijk
+Edit backward: Remove Link America/Puerto_Rico America/Lower_Princes
+Edit backzone: Remove Link America/Curacao America/Kralendijk
+Edit backzone: Remove Link America/Curacao America/Lower_Princes
 
 # Ensure TT has own primary data, not a link to a different ISO-3166-1 code
 # No backzone data is available for BL, so a Link is the best available data
@@ -765,23 +1049,10 @@ Find Line # Trinidad and Tobago
 Reinstate Zone America/Port_of_Spain
 Add Link America/Port_of_Spain America/Marigot
 Add Link America/Port_of_Spain America/St_Barthelemy
-
-
-#--------------------------------------
-# Tidy links elsewhere
-Edit northamerica
-Remove Link America/Puerto_Rico America/Aruba
-Remove Link America/Puerto_Rico America/Curacao
-Remove Link America/Puerto_Rico America/Kralendijk
-Remove Link America/Puerto_Rico America/Lower_Princes
-Remove Link America/Puerto_Rico America/Marigot
-Remove Link America/Puerto_Rico America/Port_of_Spain
-Remove Link America/Puerto_Rico America/St_Barthelemy
-
-Edit backzone
-Remove Link America/Curacao America/Kralendijk
-Remove Link America/Curacao America/Lower_Princes
-Remove Link America/Port_of_Spain America/Marigot
-Remove Link America/Port_of_Spain America/St_Barthelemy
+Edit backward: Remove Link America/Puerto_Rico America/Marigot
+Edit backward: Remove Link America/Puerto_Rico America/Port_of_Spain
+Edit backward: Remove Link America/Puerto_Rico America/St_Barthelemy
+Edit backzone: Remove Link America/Port_of_Spain America/Marigot
+Edit backzone: Remove Link America/Port_of_Spain America/St_Barthelemy
 
 #==========================================================

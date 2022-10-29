@@ -62,12 +62,12 @@ public class GlobalTzMain {
             var tool = new GlobalTzMain(false);
 
             // uncomment to perform initial local testing
-            //            if (tool.local) {
-            //                var generator = new Generator(IANA_DIR, GLOBAL_DIR);
-            //                generator.generate();
-            //                generator.write();
-            //                System.exit(0);
-            //            }
+//            if (tool.local) {
+//                var generator = new Generator(IANA_DIR, GLOBAL_DIR);
+//                generator.generate();
+//                generator.write();
+//                System.exit(0);
+//            }
 
             System.out.println("Preparing");
             tool.gitGlobalTz("git", "checkout", "iana-tz");
@@ -82,6 +82,10 @@ public class GlobalTzMain {
                 throw new IllegalStateException("Unexpected message on IANA branch: " + lastMessage);
             }
             var lastProcessedIanaId = lastMessage.substring(resetPos + 17);
+            // skip commits where actions.txt doesn't work
+            if (lastProcessedIanaId.equals("02fb5dae537003c4c6a1b9a7d90a01db206b02cb")) {
+                lastProcessedIanaId = "164727dadb9401837c07d3822615432e1c6facba";
+            }
             System.out.println("Starting from IANA " + lastProcessedIanaId);
             var idsToProcess = new ArrayList<String>();
             var id = tool.gitRevParse(IANA_DIR);
@@ -335,54 +339,89 @@ public class GlobalTzMain {
             var currentFile = (LoadedFile) null;
             for (int actionIndex = 0; actionIndex < actionLines.size(); actionIndex++) {
                 var actionLine = actionLines.get(actionIndex);
+//                System.out.println(">> " + actionLine);
                 if (actionLine.startsWith("#") || actionLine.isEmpty()) {
                     // ignore comment and empty lines
 
-                } else if (actionLine.startsWith("Edit ")) {
+                } else if (actionLine.startsWith("Edit ") && !actionLine.contains(":")) {
                     currentFile = ensureFileLoaded(actionLine.substring(5));
 
-                } else if (actionLine.startsWith("Remove Lines ")) {
-                    currentFile.removeLines(actionLine.substring(13));
-
-                } else if (actionLine.startsWith("Replace Line ")) {
-                    currentFile.replaceLine(actionLine.substring(13));
-
-                } else if (actionLine.startsWith("Insert Line ")) {
-                    currentFile.insertLine(actionLine.substring(12));
-
-                } else if (actionLine.startsWith("Add Line ")) {
-                    currentFile.addLine(actionLine.substring(9));
-
-                } else if (actionLine.startsWith("Find Line ")) {
-                    currentFile.setInsertPoint(actionLine.substring(10), 1);
-
-                } else if (actionLine.startsWith("Find Line2 ")) {
-                    currentFile.setInsertPoint(actionLine.substring(11), 2);
-
-                } else if (actionLine.startsWith("Find Line3 ")) {
-                    currentFile.setInsertPoint(actionLine.substring(11), 3);
-
-                } else if (actionLine.startsWith("Reinstate Rule ")) {
-                    currentFile.resinstateRule(actionLine.substring(15));
-
-                } else if (actionLine.startsWith("Reinstate Zone ")) {
-                    currentFile.resinstateZone(actionLine.substring(15));
-
-                } else if (actionLine.startsWith("Reinstate Link")) {
-                    currentFile.reinstateLink(actionLine.substring(15));
-
-                } else if (actionLine.startsWith("Add Link ")) {
-                    currentFile.addLink(actionLine.substring(9));
-
-                } else if (actionLine.startsWith("Remove Link ")) {
-                    currentFile.removeLink(actionLine.substring(12));
-
-                } else if (actionLine.startsWith("Ensure Link ")) {
-                    currentFile.ensureLink(actionLine.substring(12));
+                } else if (actionLine.startsWith("Edit ")) {
+                    var colonIndex = actionLine.indexOf(':');
+                    var fromFileName = actionLine.substring(5, colonIndex);
+                    var fromFile = ensureFileLoaded(fromFileName);
+                    processAction(fromFile, actionLine.substring(colonIndex + 1).stripLeading());
 
                 } else {
-                    throw new IllegalStateException("Unknown action line: " + actionLine);
+                    processAction(currentFile, actionLine);
                 }
+            }
+        }
+
+        // processes the action
+        private void processAction(LoadedFile currentFile, String actionLine) throws IOException {
+            if (actionLine.startsWith("Remove Line ")) {
+                currentFile.removeLine(actionLine.substring(12));
+
+            } else if (actionLine.startsWith("Remove Exact Line ")) {
+                currentFile.removeExactLine(actionLine.substring(18));
+
+            } else if (actionLine.startsWith("Remove Lines ")) {
+                currentFile.removeLines(actionLine.substring(13));
+
+            } else if (actionLine.startsWith("Replace Line ")) {
+                currentFile.replaceLine(actionLine.substring(13));
+
+            } else if (actionLine.startsWith("Insert Line ")) {
+                currentFile.insertLine(actionLine.substring(12));
+
+            } else if (actionLine.startsWith("Add Line ")) {
+                currentFile.addLine(actionLine.substring(9));
+
+            } else if (actionLine.startsWith("Insert Section ")) {
+                currentFile.insertSection(actionLine.substring(15));
+
+            } else if (actionLine.startsWith("Find Exact Line ")) {
+                currentFile.setInsertPoint(actionLine.substring(16), 1, true);
+
+            } else if (actionLine.startsWith("Find Line ")) {
+                currentFile.setInsertPoint(actionLine.substring(10), 1, false);
+
+            } else if (actionLine.startsWith("Find Line2 ")) {
+                currentFile.setInsertPoint(actionLine.substring(11), 2, false);
+
+            } else if (actionLine.startsWith("Find Line3 ")) {
+                currentFile.setInsertPoint(actionLine.substring(11), 3, false);
+
+            } else if (actionLine.startsWith("Find After Zone ")) {
+                currentFile.findAfterZone(actionLine.substring(16));
+
+            } else if (actionLine.startsWith("Find Next Line")) {
+                currentFile.insertIndex++;
+
+            } else if (actionLine.startsWith("Remove Next Line")) {
+                currentFile.lines.remove(currentFile.insertIndex);
+
+            } else if (actionLine.startsWith("Reinstate Rule ")) {
+                currentFile.resinstateRule(actionLine.substring(15));
+
+            } else if (actionLine.startsWith("Reinstate Zone ")) {
+                currentFile.resinstateZone(actionLine.substring(15));
+
+            } else if (actionLine.startsWith("Reinstate Link")) {
+                currentFile.reinstateLink(actionLine.substring(15));
+
+            } else if (actionLine.startsWith("Add Link ")) {
+                currentFile.addLink(actionLine.substring(9));
+
+            } else if (actionLine.startsWith("Remove Link ")) {
+                currentFile.removeLink(actionLine.substring(12));
+
+            } else if (actionLine.startsWith("Ensure Link ")) {
+                currentFile.ensureLink(actionLine.substring(12));
+
+            } else {
+                throw new IllegalStateException("Unknown action line: " + actionLine);
             }
         }
 
@@ -424,6 +463,28 @@ public class GlobalTzMain {
                 this.insertIndex = -1;
             }
 
+            // removes the first line matching the search string
+            private void removeExactLine(String search) {
+                for (int i = 0; i < lines.size(); i++) {
+                    if (lines.get(i).equals(search)) {
+                        lines.remove(i);
+                        return;
+                    }
+                }
+                throw new IllegalStateException("Remove Line not found");
+            }
+
+            // removes the first line starting with the search string
+            private void removeLine(String search) {
+                for (int i = 0; i < lines.size(); i++) {
+                    if (lines.get(i).startsWith(search)) {
+                        lines.remove(i);
+                        return;
+                    }
+                }
+                throw new IllegalStateException("Remove Line not found");
+            }
+
             // removes lines starting with the search string
             private void removeLines(String search) {
                 lines.removeIf(line -> line.startsWith(search));
@@ -437,10 +498,41 @@ public class GlobalTzMain {
                 lines.set(insertIndex - 1, newLine);
             }
 
+            // inserts the section above the insert point
+            private void insertSection(String section) {
+                if (insertIndex < 1) {
+                    throw new IllegalStateException("Insert Section requires an insert location");
+                }
+                int start = insertIndex;
+                dump(start);
+                insertIndex--;
+                if (lines.get(insertIndex - 2).isBlank() && lines.get(insertIndex - 1).isBlank()) {
+                    insertIndex--;
+                } else if (lines.get(insertIndex - 1).isBlank()) {
+                    lines.add(insertIndex - 1, "");
+                } else {
+                    lines.add(insertIndex, "");
+                    lines.add(insertIndex, "");
+                    insertIndex++;
+                }
+                dump(start);
+                lines.add(insertIndex, section);
+                insertIndex++;
+                dump(start);
+//                System.out.println("==========================");
+            }
+
+            private void dump(int start) {
+//                System.out.println("==========================");
+//                for (int i = start - 3; i < start + 3; i++) {
+//                    System.out.println(i + ": " + lines.get(i) + (i == insertIndex ? " <<<" : ""));
+//                }
+            }
+
             // inserts the line above the insert point
             private void insertLine(String newLine) {
                 if (insertIndex < 1) {
-                    throw new IllegalStateException("Replace Line requires an insert location");
+                    throw new IllegalStateException("Insert Line requires an insert location");
                 }
                 lines.add(insertIndex - 1, newLine);
             }
@@ -448,16 +540,16 @@ public class GlobalTzMain {
             // adds the line at the insert point
             private void addLine(String newLine) {
                 if (insertIndex < 0) {
-                    throw new IllegalStateException("Replace Line requires an insert location");
+                    throw new IllegalStateException("Add Line requires an insert location");
                 }
                 lines.add(insertIndex++, newLine);
             }
 
             // finds the line starting with the search string
-            private void setInsertPoint(String search, int index) {
+            private void setInsertPoint(String search, int index, boolean exact) {
                 int count = 0;
                 for (int i = 0; i < lines.size(); i++) {
-                    if (lines.get(i).startsWith(search)) {
+                    if (exact ? lines.get(i).equals(search) : lines.get(i).startsWith(search)) {
                         count++;
                         if (count == index) {
                             insertIndex = i + 1;
@@ -466,6 +558,24 @@ public class GlobalTzMain {
                     }
                 }
                 throw new IllegalStateException("Find Line failed to find '" + search + "'");
+            }
+
+            // finds the end of a zone
+            private void findAfterZone(String zoneName) {
+                var pattern = Pattern.compile("Zone[ \\t]+" + Pattern.quote(zoneName) + ".*");
+                for (int i = 0; i < lines.size(); i++) {
+                    if (pattern.matcher(lines.get(i)).matches()) {
+                        for (; i < lines.size(); i++) {
+                            if (lines.get(i).isBlank()) {
+                                insertIndex = i;
+                                return;
+                            }
+                        }
+                        insertIndex = i;
+                        return;
+                    }
+                }
+                throw new IllegalStateException("Find After Zone failed to find '" + zoneName + "'");
             }
 
             // reinstates the rule from backzone
@@ -498,6 +608,7 @@ public class GlobalTzMain {
 
             // reinstates a link
             private void reinstateLink(String linkPair) {
+                // find Link from the oldId and replace it with one to the newId
                 var splitPos = linkPair.indexOf(' ');
                 var newId = linkPair.substring(0, splitPos);
                 newId = newId.equals("Europe/Oslo") ? newId + "\t" : newId;
@@ -505,13 +616,13 @@ public class GlobalTzMain {
                 newId = newId.equals("Pacific/Chuuk") ? newId + "\t" : newId;
                 var oldId = linkPair.substring(splitPos + 1);
                 for (int i = 0; i < lines.size(); i++) {
-                    var line = lines.get(i);
+                    var line = stripTrailingComment(lines.get(i));
                     if (line.startsWith("Link") && line.endsWith(oldId)) {
                         lines.set(i, "Link\t" + newId + "\t" + oldId);
                         return;
                     }
                 }
-                throw new IllegalStateException("Reinstate Link did not find ID");
+                throw new IllegalStateException("Reinstate Link did not find ID: " + linkPair);
             }
 
             // finds the rule/zone lines in backzone
@@ -568,6 +679,12 @@ public class GlobalTzMain {
                         .findAny()
                         .orElseThrow(
                                 () -> new IllegalStateException("Ensure Link failed to find 'Link " + linkPair + "'"));
+            }
+
+            // strip trailing structured comments
+            private String stripTrailingComment(String line) {
+                var index = line.indexOf("#=");
+                return index < 0 ? line : line.substring(0, index).stripTrailing();
             }
         }
 

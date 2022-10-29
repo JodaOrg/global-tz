@@ -20,10 +20,12 @@ jobs:
         git config --global user.name "Stephen Colebourne"
         git config --global advice.detachedHead false
         git config --global init.defaultBranch "main"
+
     - name: Checkout global-tz
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: 'global-tz'
+
     - name: Find version
       run: |
         MAIN_VERSION1=${GITHUB_REF/#refs\/tags\//}
@@ -32,10 +34,12 @@ jobs:
         echo "TAG_VERSION=${ACTUAL_VERSION}" >> $GITHUB_ENV
         echo "MAIN_VERSION=${MAIN_VERSION}"
         echo "ACTUAL_VERSION=${ACTUAL_VERSION}"
+
     - name: Install lzip
       run: |
         sudo apt-get update -y
         sudo apt-get install -y lzip
+
     - name: Build
       run: |
         echo ${{ env.TAG_VERSION }}
@@ -52,6 +56,7 @@ jobs:
         sha512sum tzdb-${{ env.TAG_VERSION }}.tar.lz > tzdb-${{ env.TAG_VERSION }}.tar.lz.sha512
         sha512sum tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz > tzdata${{ env.TAG_VERSION }}-rearguard.tar.gz.sha512
         ls -la
+
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
