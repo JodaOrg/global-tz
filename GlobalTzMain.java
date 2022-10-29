@@ -356,6 +356,11 @@ public class GlobalTzMain {
                     processAction(currentFile, actionLine);
                 }
             }
+
+            // fix the Makefile system
+            // this is lenient, in case the Makefile changes again
+            var checklinks = ensureFileLoaded("Makefile");
+            checklinks.removeLines("\t\t  -v backcheck=backward");
         }
 
         // processes the action
@@ -471,7 +476,7 @@ public class GlobalTzMain {
                         return;
                     }
                 }
-                throw new IllegalStateException("Remove Line not found");
+                throw new IllegalStateException("Remove Line not found: " + search);
             }
 
             // removes the first line starting with the search string
@@ -482,7 +487,7 @@ public class GlobalTzMain {
                         return;
                     }
                 }
-                throw new IllegalStateException("Remove Line not found");
+                throw new IllegalStateException("Remove Line not found: " + search);
             }
 
             // removes lines starting with the search string
