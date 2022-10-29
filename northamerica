@@ -1596,7 +1596,9 @@ Zone America/Moncton	-4:19:08 -	LMT	1883 Dec  9
 # Quebec
 
 # From Paul Eggert (2020-01-10):
+# See America/Toronto for most of Quebec, including Montreal.
 # See America/Halifax for the Îles de la Madeleine and the Listuguj reserve.
+# See America/Puerto_Rico for east of Natashquan.
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
 Zone America/Blanc-Sablon -3:48:28 -	LMT	1884
 			-4:00	Canada	A%sT	1970
@@ -1713,6 +1715,7 @@ Rule	Toronto	1951	1956	-	Sep	lastSun	2:00	0	S
 # is wrong, and that he had confirmed it by checking the 1971-10-30
 # Toronto Star, which said that DST was ending 1971-10-31 as usual.
 Rule	Toronto	1957	1973	-	Oct	lastSun	2:00	0	S
+
 
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
 Zone America/Toronto	-5:17:32 -	LMT	1895
@@ -2750,12 +2753,11 @@ Zone America/Tijuana	-7:48:04 -	LMT	1922 Jan  1  7:00u
 Zone America/Anguilla	-4:12:16 -	LMT	1912 Mar  2
 			-4:00	-	AST
 
-# Antigua and Barbuda
+# Antigua & Barbuda
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
 Zone	America/Antigua	-4:07:12 -	LMT	1912 Mar 2
 			-5:00	-	EST	1951
 			-4:00	-	AST
-
 
 # The Bahamas
 # Rule	NAME	FROM	TO	-	IN	ON	AT	SAVE	LETTER/S
@@ -3223,7 +3225,6 @@ Zone	America/Havana	-5:29:28 -	LMT	1890
 Zone America/Dominica	-4:05:36 -	LMT	1911 Jul  1  0:01 # Roseau
 			-4:00	-	AST
 
-
 # Dominican Republic
 
 # From Steffen Thorsen (2000-10-30):
@@ -3282,6 +3283,7 @@ Zone America/Guadeloupe	-4:06:08 -	LMT	1911 Jun  8 # Pointe-à-Pitre
 
 # St Barthélemy
 # See America/St_Barthelemy in southamerica.
+
 # St Martin (French part)
 # See America/Marigot in southamerica.
 
@@ -3475,7 +3477,6 @@ Zone America/Martinique	-4:04:20 -      LMT	1890        # Fort-de-France
 Zone America/Montserrat	-4:08:52 -	LMT	1911 Jul  1  0:01 # Cork Hill
 			-4:00	-	AST
 
-
 # Nicaragua
 #
 # This uses Shanks & Pottenger for times before 2005.
@@ -3566,7 +3567,6 @@ Zone America/St_Lucia	-4:04:00 -	LMT	1890 # Castries
 			-4:04:00 -	CMT	1912 # Castries Mean Time
 			-4:00	-	AST
 
-
 # St Pierre and Miquelon
 # There are too many St Pierres elsewhere, so we'll use 'Miquelon'.
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
@@ -3575,12 +3575,11 @@ Zone America/Miquelon	-3:44:40 -	LMT	1911 May 15 # St Pierre
 			-3:00	-	-03	1987
 			-3:00	Canada	-03/-02
 
-# St Vincent and the Grenadines
+# St Vincent & the Grenadines
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
 Zone America/St_Vincent	-4:04:56 -	LMT	1890 # Kingstown
 			-4:04:56 -	KMT	1912 # Kingstown Mean Time
 			-4:00	-	AST
-
 
 # Sint Maarten
 # See America/Lower_Princes in southamerica.
@@ -3663,8 +3662,6 @@ Zone America/Tortola	-4:18:28 -	LMT	1911 Jul # Road Town
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
 Zone America/St_Thomas	-4:19:44 -	LMT	1911 Jul # Charlotte Amalie
 			-4:00	-	AST
-
-
 
 # Local Variables:
 # coding: utf-8
