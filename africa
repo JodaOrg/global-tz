@@ -549,7 +549,7 @@ Zone	Africa/Maseru	1:50:00 -	LMT	1903 Mar
 # President William R. Tolbert, Jr., July 23, 1971-July 31, 1972.
 # Monrovia: Executive Mansion.
 #
-# Use the abbreviation "MMT" before 1972, as the more-accurate numeric
+# Use the abbreviation "MMT" before 1972, as the more accurate numeric
 # abbreviation "-004430" would be one byte over the POSIX limit.
 #
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
