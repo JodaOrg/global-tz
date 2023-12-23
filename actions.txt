@@ -379,11 +379,6 @@ Reinstate Zone Antarctica/Syowa
 Remove Lines # See Asia/Riyadh
 Edit backward: Remove Link Asia/Riyadh Antarctica/Syowa
 
-Find Line # Vostok
-Remove Lines # See Asia/Urumqi
-Reinstate Zone Antarctica/Vostok
-Edit backward: Remove Link Asia/Urumqi Antarctica/Vostok
-
 Find Line # Kerguelen
 Replace Line # Kerguelen
 Reinstate Zone Indian/Kerguelen
