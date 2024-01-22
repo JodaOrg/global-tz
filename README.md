@@ -7,8 +7,8 @@ This branch contains the tool that generates the database.
 
 ## Status
 
-The Global Time Zone Database was last generated at 2024-01-21T02:09:48.299398821Z.
-It is up to date with commit f481c61c2429b959459a55e52d780c545ae3a12b from the IANA Time Zone database.
+The Global Time Zone Database was last generated at 2024-01-22T13:28:05.716404990Z.
+It is up to date with commit f295cc13becf8483fb0712349008d4e4a87b266c from the IANA Time Zone database.
 
 
 ## Rationale
