@@ -41,8 +41,6 @@ This is because they have the same Time Zone rules since 1970 and Abidjan is a l
 The result is that IANA database data for Reykjavik prior to 1970 is incorrect.
 By contrast, global-tz uses the previous approach that supports both models of Time Zones,
 ensuring that identifiers only alias across an ISO 3166-1 boundary where no other data is available.
-(Europe/Reykjavik is not yet an alias to Africa/Abidjan, but soon will be.
-Other locations have been aliased already, notably in Africa and the Carribean.)
 
 
 ## ISO-3166-1
@@ -93,4 +91,4 @@ The data on that branch is adjusted as per the rules of this project.
 
 Errors in the timezone data should be taken up at the [IANA Time Zone Database](https://github.com/eggert/tz).
 
-Issues should be raised at this project only where the process of reinstaing data from IANA is incorrect.
+Issues should be raised at this project only where the process of reinstating data from IANA is incorrect.
