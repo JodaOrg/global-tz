@@ -22,7 +22,7 @@ jobs:
         git config --global init.defaultBranch "main"
 
     - name: Checkout global-tz
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: 'global-tz'
         fetch-depth: 0
@@ -62,7 +62,7 @@ jobs:
         ls -la
 
     - name: Publish artifacs to inspect manually
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Output global-tz files
         retention-days: 5

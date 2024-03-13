@@ -22,7 +22,7 @@ jobs:
         git config --global init.defaultBranch "main"
 
     - name: Checkout global-tz
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: 'global-tz'
         fetch-depth: 0
@@ -59,7 +59,7 @@ jobs:
         ls -la
 
     - name: Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         body: Release ${{ env.TAG_VERSION }} of global-tz, derived from iana-tz
         tag_name: ${{ env.TAG_VERSION }}
