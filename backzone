@@ -266,10 +266,8 @@ Link Africa/Asmara Africa/Asmera
 
 # Angola
 #
-# From Paul Eggert (2018-02-16):
-# Shanks gives 1911-05-26 for the transition to WAT,
-# evidently confusing the date of the Portuguese decree
-# (see Europe/Lisbon) with the date that it took effect.
+# From Tim Parenti (2024-07-01), per Paul Eggert (2018-02-16):
+# For timestamps before independence, see commentary for Europe/Lisbon.
 #
 
 # Democratic Republic of the Congo (east)
@@ -879,10 +877,10 @@ Zone	Asia/Kashgar	5:03:56	-	LMT	1928     # or Kashi or Kaxgar
 # Milne says 3:54:24 was the meridian of the Muscat Tidal Observatory.
 
 # India
-# From Paul Eggert (2014-08-11), after a heads-up from Stephen Colebourne:
-# According to a Portuguese decree (1911-05-26)
-# https://dre.pt/pdf1sdip/1911/05/12500/23132313.pdf
-# Portuguese India switched to UT +05 on 1912-01-01.
+# From Tim Parenti (2024-07-01), per Paul Eggert (2014-08-11), after a
+# heads-up from Stephen Colebourne:
+# According to a Portuguese decree (1911-05-24), Portuguese India switched to
+# UT +05 on 1912-01-01 (see Europe/Lisbon).
 #Zone	Asia/Panaji	[not enough info to complete]
 
 # Cambodia
