@@ -363,11 +363,6 @@ public class GlobalTzMain {
             // this is lenient, in case the Makefile changes again
             var makefile = ensureFileLoaded("Makefile");
             makefile.removeLines("\t\t  -v backcheck=backward");
-            makefile.setInsertPoint("check_now:", "now.ck:", 1, false);
-            // remove check_now
-            makefile.addLine("\t\ttouch $@");
-            makefile.addLine("# Original code:");
-            makefile.addLine("check_now_original:\tchecknow.awk date tzdata.zi zdump zic zone1970.tab zonenow.tab");
         }
 
         // processes the action

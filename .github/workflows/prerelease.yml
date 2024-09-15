@@ -52,7 +52,7 @@ jobs:
         git describe --abbrev=7 --dirty
         git describe --match "[0-9][0-9][0-9][0-9][a-z]*" --abbrev=7 --dirty
         git describe --match '[0-9][0-9][0-9][0-9][a-z]*' --abbrev=7 --dirty
-        make check VERSION="${{ env.TAG_VERSION }}" ZONETABLES="zone.tab"
+        make check_mild VERSION="${{ env.TAG_VERSION }}" ZONETABLES="zone.tab"
         make tarballs VERSION="${{ env.TAG_VERSION }}"
         ls -la
         sha512sum tzcode${{ env.TAG_VERSION }}.tar.gz > tzcode${{ env.TAG_VERSION }}.tar.gz.sha512
@@ -70,3 +70,4 @@ jobs:
 
 # Use git rest --hard to ensure the state is what make expects, if this is not done the version file is incorrect in the output
 # ZONETABLES is set to remove zone1970.tab, as the Makefile validation doesn't cover our use case
+# check_mild is used instead of check, as the Makefile validation doesn't cover our use case
