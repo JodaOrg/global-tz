@@ -855,10 +855,10 @@ tzselect:	tzselect.ksh version
 		chmod +x $@.out
 		mv $@.out $@
 
-check: check_mild back.ck
+check: check_mild back.ck now.ck
 check_mild: check_web check_zishrink \
   character-set.ck white-space.ck links.ck mainguard.ck \
-  name-lengths.ck now.ck slashed-abbrs.ck sorted.ck \
+  name-lengths.ck slashed-abbrs.ck sorted.ck \
   tables.ck ziguard.ck tzs.ck
 
 # True if UTF8_LOCALE does not work;
@@ -945,9 +945,6 @@ CHECK_NOW_TIMESTAMP = $$(./date +%s)
 CHECK_NOW_FUTURE_YEARS = 28
 CHECK_NOW_FUTURE_SECS = $(CHECK_NOW_FUTURE_YEARS) * 366 * 24 * 60 * 60
 now.ck: checknow.awk date tzdata.zi zdump zic zone1970.tab zonenow.tab
-		touch $@
-# Original code:
-check_now_original:	checknow.awk date tzdata.zi zdump zic zone1970.tab zonenow.tab
 		rm -fr $@d
 		mkdir $@d
 		./zic -d $@d tzdata.zi
