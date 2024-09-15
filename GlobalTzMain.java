@@ -59,6 +59,8 @@ public class GlobalTzMain {
     public static void main(String[] args) {
         try {
             // set to true to run locally without pushing
+            // the `iana` subfolder must point at the commit that is to be treated as the latest from IANA
+            // the `global` subfolder must have consistent `global-tz` and `iana-tz` branches representing the state to be updated
             var tool = new GlobalTzMain(false);
 
             // uncomment to perform initial local testing
@@ -359,8 +361,13 @@ public class GlobalTzMain {
 
             // fix the Makefile system
             // this is lenient, in case the Makefile changes again
-            var checklinks = ensureFileLoaded("Makefile");
-            checklinks.removeLines("\t\t  -v backcheck=backward");
+            var makefile = ensureFileLoaded("Makefile");
+            makefile.removeLines("\t\t  -v backcheck=backward");
+            makefile.setInsertPoint("check_now:", "now.ck:", 1, false);
+            // remove check_now
+            makefile.addLine("\t\ttouch $@");
+            makefile.addLine("# Original code:");
+            makefile.addLine("check_now_original:\tchecknow.awk date tzdata.zi zdump zic zone1970.tab zonenow.tab");
         }
 
         // processes the action
@@ -552,9 +559,17 @@ public class GlobalTzMain {
 
             // finds the line starting with the search string
             private void setInsertPoint(String search, int index, boolean exact) {
+                setInsertPoint(search, search, index, exact);
+            }
+
+            // finds the line starting with one of the search strings
+            private void setInsertPoint(String search, String search2, int index, boolean exact) {
                 int count = 0;
                 for (int i = 0; i < lines.size(); i++) {
-                    if (exact ? lines.get(i).equals(search) : lines.get(i).startsWith(search)) {
+                    String line = lines.get(i);
+                    if (exact ?
+                            line.equals(search) || line.equals(search2) :
+                            line.startsWith(search) || line.startsWith(search2)) {
                         count++;
                         if (count == index) {
                             insertIndex = i + 1;
