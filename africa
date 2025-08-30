@@ -155,8 +155,9 @@ Zone	Africa/Bangui	1:14:20	-	LMT	1912
 			1:00	-	WAT
 
 # Chad
+# Fort-Lamy was renamed to N’Djamena on 1973-04-06.
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Africa/Ndjamena	1:00:12 -	LMT	1912 Jan  1 # N'Djamena
+Zone	Africa/Ndjamena	1:00:12 -	LMT	1912 Jan  1 # Fort-Lamy
 			1:00	-	WAT	1979 Oct 14
 			1:00	1:00	WAST	1980 Mar  8
 			1:00	-	WAT
