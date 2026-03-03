@@ -276,6 +276,7 @@ static char	lowerit(char);
 static void	mkdirs(char const *, bool);
 static void	newabbr(const char * abbr);
 static zic_t	oadd(zic_t t1, zic_t t2);
+static zic_t	omul(zic_t, zic_t);
 static void	outzone(const struct zone * zp, ptrdiff_t ntzones);
 static zic_t	rpytime(const struct rule * rp, zic_t wantedy);
 static bool	rulesub(struct rule * rp,
@@ -2088,15 +2089,11 @@ gethms(char const *string, char const *errstring)
 			error("%s", errstring);
 			return 0;
 	}
-	if (ZIC_MAX / SECSPERHOUR < hh) {
-		error(_("time overflow"));
-		return 0;
-	}
 	ss += 5 + ((ss ^ 1) & (xr == '0')) <= tenths; /* Round to even.  */
 	if (noise && (hh > HOURSPERDAY ||
 		(hh == HOURSPERDAY && (mm != 0 || ss != 0))))
 warning(_("values over 24 hours not handled by pre-2007 versions of zic"));
-	return oadd(sign * hh * SECSPERHOUR,
+	return oadd(omul(hh, sign * SECSPERHOUR),
 		    sign * (mm * SECSPERMIN + ss));
 }
 
@@ -2256,10 +2253,6 @@ inzsub(char **fields, int nfields, bool iscont)
 		z.z_untiltime = rpytime(&z.z_untilrule,
 			z.z_untilrule.r_loyear);
 		if (iscont && nzones > 0 &&
-			z.z_untiltime > min_time &&
-			z.z_untiltime < max_time &&
-			zones[nzones - 1].z_untiltime > min_time &&
-			zones[nzones - 1].z_untiltime < max_time &&
 			zones[nzones - 1].z_untiltime >= z.z_untiltime) {
 		  error(_("Zone continuation line end time is"
 			  " not after end time of previous line"));
@@ -2341,15 +2334,7 @@ getleapdatetime(char **fields, bool expire_line)
 			return -1;
 	}
 	dayoff = oadd(dayoff, day - 1);
-	if (dayoff < min_time / SECSPERDAY) {
-		error(_("time too small"));
-		return -1;
-	}
-	if (dayoff > max_time / SECSPERDAY) {
-		error(_("time too large"));
-		return -1;
-	}
-	t = dayoff * SECSPERDAY;
+	t = omul(dayoff, SECSPERDAY);
 	tod = gethms(fields[LP_TIME], _("invalid time of day"));
 	t = tadd(t, tod);
 	if (t < 0)
@@ -3599,9 +3584,6 @@ outzone(const struct zone *zpfirst, ptrdiff_t zonecount)
 					if (!r->r_todisstd)
 						offset = oadd(offset, save);
 					jtime = r->r_temp;
-					if (jtime == min_time ||
-						jtime == max_time)
-							continue;
 					jtime = tadd(jtime, -offset);
 					if (k < 0 || jtime < ktime) {
 						k = j;
@@ -4056,6 +4038,7 @@ time_overflow(void)
   exit(EXIT_FAILURE);
 }
 
+/* Return T1 + T2, but diagnose any overflow and exit.  */
 ATTRIBUTE_PURE_114833_HACK
 static zic_t
 oadd(zic_t t1, zic_t t2)
@@ -4071,26 +4054,41 @@ oadd(zic_t t1, zic_t t2)
   time_overflow();
 }
 
+/* Return T1 + T2, but diagnose any overflow and exit.
+   This is like oadd, except the result must fit in min_time..max_time range,
+   which on oddball machines can be a smaller range than ZIC_MIN..ZIC_MAX.  */
 ATTRIBUTE_PURE_114833_HACK
 static zic_t
 tadd(zic_t t1, zic_t t2)
 {
-#ifdef ckd_add
-  zic_t sum;
-  if (!ckd_add(&sum, t1, t2) && min_time <= sum && sum <= max_time)
+  zic_t sum = oadd(t1, t2);
+  if (min_time <= sum && sum <= max_time)
     return sum;
+  time_overflow();
+}
+
+/* Return T1 * T2, but diagnose any overflow and exit.  */
+ATTRIBUTE_PURE_114833_HACK
+static zic_t
+omul(zic_t t1, zic_t t2)
+{
+#ifdef ckd_mul
+  zic_t product;
+  if (!ckd_mul(&product, t1, t2))
+    return product;
 #else
-  if (t1 < 0 ? min_time - t1 <= t2 : t2 <= max_time - t1)
-    return t1 + t2;
+  if (t2 < 0
+      ? ZIC_MAX / t2 <= t1 && (t2 == -1 || t1 <= ZIC_MIN / t2)
+      : t2 == 0 || (ZIC_MIN / t2 <= t1 && t1 <= ZIC_MAX / t2))
+    return t1 * t2;
 #endif
-  if (t1 == min_time || t1 == max_time)
-    return t1;
   time_overflow();
 }
 
 /*
 ** Given a rule, and a year, compute the date (in seconds since January 1,
 ** 1970, 00:00 LOCAL time) in that year that the rule refers to.
+** Do not count leap seconds.  On error, diagnose and exit.
 */
 
 static zic_t
@@ -4101,10 +4099,6 @@ rpytime(const struct rule *rp, zic_t wantedy)
 	register zic_t	t, y;
 	int yrem;
 
-	if (wantedy == ZIC_MIN)
-		return min_time;
-	if (wantedy == ZIC_MAX)
-		return max_time;
 	m = TM_JANUARY;
 	y = EPOCH_YEAR;
 
@@ -4162,11 +4156,7 @@ rpytime(const struct rule *rp, zic_t wantedy)
 will not work with pre-2004 versions of zic"));
 		}
 	}
-	if (dayoff < min_time / SECSPERDAY)
-		return min_time;
-	if (dayoff > max_time / SECSPERDAY)
-		return max_time;
-	t = (zic_t) dayoff * SECSPERDAY;
+	t = omul(dayoff, SECSPERDAY);
 	return tadd(t, rp->r_tod);
 }
 

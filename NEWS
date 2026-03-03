@@ -62,7 +62,7 @@ Unreleased, experimental changes
 
     Some other undefined behavior, triggered by TZif files containing
     outlandish but conforming UT offsets or leap second corrections,
-    has also been fixed.  (Also reported by Naveed8951.)
+    has also been fixed.  (Some of these bugs reported by Naveed8951.)
 
     localtime.c no longer rejects TZif files that exactly fit in its
     internal structures, fixing off-by-one typos introduced in 2014g.
