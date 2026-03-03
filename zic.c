@@ -2666,7 +2666,7 @@ writezone(const char *const name, const char *const string, char version,
 	if (timecnt > 1)
 		qsort(attypes, timecnt, sizeof *attypes, atcomp);
 	/*
-	** Optimize.
+	** Optimize and skip unwanted transitions.
 	*/
 	{
 		ptrdiff_t fromi, toi;
@@ -2675,6 +2675,10 @@ writezone(const char *const name, const char *const string, char version,
 		fromi = 0;
 		for ( ; fromi < timecnt; ++fromi) {
 			if (toi != 0) {
+			    /* Skip the previous transition if it is unwanted
+			       because its local time is not earlier.
+			       The UT offset additions can't overflow because
+			       of how the times were calculated.  */
 			    unsigned char type_2 =
 			      toi == 1 ? 0 : attypes[toi - 2].type;
 			    if ((attypes[fromi].at
@@ -2688,6 +2692,10 @@ writezone(const char *const name, const char *const string, char version,
 				    continue;
 			    }
 			}
+
+			/* Use a transition if it is the first one,
+			   or if it cannot be merged for other reasons,
+			   or if it transitions to different timekeeping.  */
 			if (toi == 0
 			    || attypes[fromi].dontmerge
 			    || (utoffs[attypes[toi - 1].type]
