@@ -3114,11 +3114,10 @@ doabbr(char *abbr, struct zone const *zp, char const *letters,
        bool isdst, zic_t save, bool doquotes)
 {
 	register char *	cp;
-	register char *	slashp;
 	ptrdiff_t len;
 	char const *format = zp->z_format;
+	char const *slashp = strchr(format, '/');
 
-	slashp = strchr(format, '/');
 	if (slashp == NULL) {
 	  char letterbuf[PERCENT_Z_LEN_BOUND + 1];
 	  if (zp->z_format_specifier == 'z')
