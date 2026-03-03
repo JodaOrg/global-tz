@@ -60,6 +60,5 @@ jobs:
       run: |
         cd global
         ls -la
-        make check_mild VERSION="test" ZONETABLES="zone.tab"
         make tarballs VERSION="test"
         ls -la

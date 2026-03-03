@@ -303,8 +303,7 @@ public class GlobalTzMain {
     // is the file skipped
     static boolean isFileToBeCopied(Path file) {
         return Files.isRegularFile(file) &&
-                !file.toString().contains(".git") &&
-                !file.getFileName().toString().equals(".gitignore");
+                !file.toString().contains(".git");
     }
 
     //-----------------------------------------------------------------------
