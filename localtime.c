@@ -3135,7 +3135,7 @@ posix2time(time_t t)
 time_t
 time(time_t *p)
 {
-  time_t r = sys_time(0);
+  time_t r = sys_time(NULL);
   if (r != (time_t) -1) {
     iinntt offset = EPOCH_LOCAL ? timezone : 0;
     if (offset < IINNTT_MIN + EPOCH_OFFSET
