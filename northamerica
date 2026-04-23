@@ -1971,7 +1971,7 @@ Zone America/Edmonton	-7:33:52 -	LMT	1906 Sep
 # I asked the BC government for advice, with no response. For now, do this:
 #   1.	As a temporary hack, pretend that the BC law takes effect
 #	not on 2026-03-09 at 00:00, but on 2026-11-01 at 02:00.
-#	This pretense works around a limitation in CLDR v48.1 (2026-01-08),
+#	This pretense works around a limitation in CLDR v48.2 (2026-03-17),
 #	which would otherwise say the interval uses “Pacific Standard Time”.
 #	(Below, this temporary hack is marked “Temporary hack; see above.”)
 #	Strictly speaking this hack is incorrect since the interval uses
