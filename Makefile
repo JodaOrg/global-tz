@@ -913,7 +913,7 @@ tzselect:	tzselect.ksh version
 check: check_mild back.ck now.ck
 check_mild: check_web check_zishrink \
   character-set.ck white-space.ck links.ck mainguard.ck \
-  name-lengths.ck slashed-abbrs.ck sorted.ck \
+  name-lengths.ck news.ck slashed-abbrs.ck sorted.ck \
   tables.ck ziguard.ck tzs.ck
 
 # True if UTF8_LOCALE does not work;
@@ -1081,6 +1081,12 @@ zishrink-posix.ck zishrink-right.ck: \
 		  esac
 		diff -r $@d shrunk-$@d
 		rm -fr $@d t-$@d shrunk-$@d
+		touch $@
+
+# Check that NEWS has data release versions and dates in reverse order.
+news.ck: NEWS
+		grep '^Release [0-9][0-9][0-9][0-9]' NEWS | LC_ALL=C sort -cru
+		sed -n '/ -0000$$/!s/^Release [^ ]*//p' NEWS|LC_ALL=C sort -cru
 		touch $@
 
 clean_misc:
