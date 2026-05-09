@@ -1742,6 +1742,22 @@ Zone America/Toronto	-5:17:32 -	LMT	1895
 
 # Manitoba
 
+# From Paul Eggert (2026-05-08):
+# For 1916 timestamps America/Winnipeg covers only a small region. See:
+# Cassidy C. Winnipeg's 100-year history with daylight time.
+# Winnipeg Free Press. 2026-05-06.
+# https://www.winnipegfreepress.com/our-communities/correspondents/2026/05/06/winnipegs-110-year-history-with-daylight-time
+# Of the 1916 experiment, Cassidy writes: "As rural areas and nearby
+# urban centres such as Selkirk and Brandon did not adopt DST, the
+# City of Winnipeg essentially had its own time zone." Cassidy also
+# writes that province-wide DST came into effect on 1963-05-12.
+#
+# Shanks & Pottenger write that Winnipeg did not observe DST in 1964 and 1965.
+# Although dubious in the light of Cassidy's article, we lack a better source.
+# Perhaps S&P's data are for the train stations, not for the city?
+# Also, S&P say Manitoba switched at 02:00 (not 02:00s) starting in 1966.
+# Since 02:00s is clearly correct for 1967 on, assume 02:00s in 1966 too.
+
 # From Rob Douglas (2006-04-06):
 # the old Manitoba Time Act - as amended by Bill 2, assented to
 # March 27, 1987 ... said ...
@@ -1755,11 +1771,6 @@ Zone America/Toronto	-5:17:32 -	LMT	1895
 # the time of Daylight Saving Time for 2005 and so the provisions of
 # the 1987 version would apply - the changeover was at 2:00 Central
 # Standard Time (i.e. not until 3:00 Central Daylight Time).
-
-# From Paul Eggert (2006-04-10):
-# Shanks & Pottenger say Manitoba switched at 02:00 (not 02:00s)
-# starting 1966.  Since 02:00s is clearly correct for 1967 on, assume
-# it was also 02:00s in 1966.
 
 # Rule	NAME	FROM	TO	-	IN	ON	AT	SAVE	LETTER/S
 Rule	Winn	1916	only	-	Apr	23	0:00	1:00	D
