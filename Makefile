@@ -377,7 +377,8 @@ GCC_DEBUG_FLAGS = -DGCC_LINT -g3 -O3 \
   -Wdeclaration-after-statement -Wdouble-promotion \
   -Wduplicated-branches -Wduplicated-cond -Wflex-array-member-not-at-end \
   -Wformat=2 -Wformat-overflow=2 -Wformat-signedness -Wformat-truncation \
-  -Wimplicit-fallthrough=5 -Winit-self -Wlogical-op \
+  -Wfree-labels -Wimplicit-fallthrough=5 -Winit-self \
+  -Wkeyword-macro -Wlogical-op \
   -Wmissing-declarations -Wmissing-prototypes \
   -Wmissing-variable-declarations -Wnested-externs \
   -Wnull-dereference \
