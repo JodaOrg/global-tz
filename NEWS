@@ -5,6 +5,8 @@ Unreleased, experimental changes
   Briefly:
     Canada’s Northwest Territories moved to permanent -06 on 2026-08-21.
     New zone for Golden, BC, moving from -07/-06 to -07 on 2026-11-01.
+    Obsolescent settings like TZ="EST5EDT" now conform better to POSIX.
+    Fix security, performance and porting bugs in zic and localtime.
 
   Changes to future timestamps
 
