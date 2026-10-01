@@ -1,11 +1,13 @@
 *~
 *.class
+*.iml
 *.log
 /bin/
 /target/
 /temp/
 /global/
 /iana/
+/.idea/
 /.project
 /.settings/
 /.classpath
