@@ -889,7 +889,7 @@ Find Line # Panama
 Remove Next Line
 
 # Ensure CA has own data, not a link to a different ISO-3166-1 code
-Find Line # Manitoba
+Find Exact Line # Manitoba
 Insert Line # For Atikokan see America/Panama
 Reinstate Zone America/Atikokan
 Edit backward: Remove Link America/Panama America/Atikokan
